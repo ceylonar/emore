@@ -53,6 +53,7 @@ export async function addHeroBanner(data: unknown) {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
-    return { success: false, error: 'Failed to create hero banner.' };
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { success: false, error: `Failed to create hero banner: ${errorMessage}` };
   }
 }

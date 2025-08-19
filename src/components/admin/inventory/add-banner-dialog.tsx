@@ -62,10 +62,11 @@ export default function AddBannerDialog({ open, onOpenChange }: AddBannerDialogP
       form.reset();
       onOpenChange(false);
     } else {
+      const errorMessage = typeof result.error === 'string' ? result.error : 'Failed to add hero banner. Please try again.';
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to add hero banner. Please try again.',
+        description: errorMessage,
       });
     }
   };
