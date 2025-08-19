@@ -1,23 +1,23 @@
 import * as admin from 'firebase-admin';
 
-const FIREBASE_SERVICE_ACCOUNT_64 = process.env.FIREBASE_SERVICE_ACCOUNT_64;
+const FIREBASE_SERVICE_ACCOUNT = process.env.FIREBASE_SERVICE_ACCOUNT;
 
-if (!FIREBASE_SERVICE_ACCOUNT_64) {
+if (!FIREBASE_SERVICE_ACCOUNT) {
   if (process.env.NODE_ENV === 'production') {
     // In production, we expect the service account to be set.
     throw new Error(
-      'FIREBASE_SERVICE_ACCOUNT_64 environment variable not set.'
+      'FIREBASE_SERVICE_ACCOUNT environment variable not set.'
     );
   } else {
     // In development, we can fall back to default credentials.
     console.warn(
-      'FIREBASE_SERVICE_ACCOUNT_64 not set. Using default application credentials. This is intended for local development only.'
+      'FIREBASE_SERVICE_ACCOUNT not set. Using default application credentials. This is intended for local development only.'
     );
   }
 }
 
-const serviceAccount = FIREBASE_SERVICE_ACCOUNT_64
-  ? JSON.parse(Buffer.from(FIREBASE_SERVICE_ACCOUNT_64, 'base64').toString('utf-8'))
+const serviceAccount = FIREBASE_SERVICE_ACCOUNT
+  ? JSON.parse(FIREBASE_SERVICE_ACCOUNT)
   : undefined;
 
 if (admin.apps.length === 0) {
