@@ -11,7 +11,7 @@ export default function Footer() {
             <Link href="/" className="flex flex-col items-start">
                 <Image src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
             </Link>
-            <p className="mt-2 text-sm text-white/80">Quality wear imported from Italy.</p>
+            <p className="mt-4 text-sm text-white/80 max-w-xs">Emoré brings you premium fashion imported from Italy, crafted for both men and women. Our Collections rooted in Old money elegance, yet each piece is with timeless quality and modern sophistication with the best quality fabrics to ensure timeless style and a perfect fit—so you always look and feel your absolute best.</p>
           </div>
           <div>
             <h4 className="text-sm font-semibold tracking-wider uppercase">Shop</h4>
