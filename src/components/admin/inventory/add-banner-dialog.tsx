@@ -27,7 +27,7 @@ import { addHeroBanner } from '@/app/admin/inventory/actions';
 
 const heroBannerSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  imageUrl: z.string().url('Invalid image URL').min(1, 'Image URL is required'),
+  imageUrl: z.string().min(1, 'Image URL is required'),
   dataAiHint: z.string().optional(),
 });
 
