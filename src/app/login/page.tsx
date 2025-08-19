@@ -19,18 +19,44 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/auth-provider";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address."),
   password: z.string().min(1, "Password is required."),
 });
 
+function LoginFormSkeleton() {
+    return (
+        <Card className="mx-auto max-w-sm">
+            <CardHeader>
+                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-4 w-48 mt-2" />
+            </CardHeader>
+            <CardContent>
+                <div className="grid gap-4">
+                    <div className="grid gap-2">
+                        <Skeleton className="h-4 w-12" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                    <div className="grid gap-2">
+                        <Skeleton className="h-4 w-16" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const { isAdmin } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
@@ -38,6 +64,16 @@ export default function LoginPage() {
     resolver: zodResolver(formSchema),
     defaultValues: { email: "", password: "" },
   });
+
+  useEffect(() => {
+    if (!loading && user) {
+        if (isAdmin) {
+            router.push('/admin');
+        } else {
+            router.push('/');
+        }
+    }
+  }, [user, isAdmin, loading, router])
 
   const handleLoginSuccess = (isAdminLogin: boolean) => {
     toast({ title: "Login Successful", description: "Welcome back!" });
@@ -82,6 +118,14 @@ export default function LoginPage() {
         setIsGoogleSubmitting(false);
     }
   };
+  
+  if (loading || user) {
+      return (
+          <div className="flex items-center justify-center py-24 px-4">
+              <LoginFormSkeleton />
+          </div>
+      )
+  }
 
   return (
     <div className="flex items-center justify-center py-24 px-4">
