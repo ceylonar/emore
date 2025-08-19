@@ -81,8 +81,8 @@ export default function ManageBannersPage() {
   const [banners, setBanners] = useState<HeroBanner[]>([]);
 
   useEffect(() => {
-    // This hook now only runs on the client to sync state with server-rendered data
-    // It will be updated automatically by revalidatePath without causing hydration errors.
+    // We fetch the banners on the client side to ensure the list is up-to-date
+    // after a form submission which triggers a revalidation.
     getHeroBanners().then(setBanners);
   }, []);
 
