@@ -28,10 +28,8 @@ function AddBannerForm() {
             formRef.current?.reset();
             // The server action's revalidatePath will trigger a re-fetch of data
             // for server components, and for client components, we can either
-            // manually trigger a re-fetch or rely on navigation. A more advanced
-            // solution would use a state management library to update the list
-            // without waiting for the next page load. For now, the revalidation
-            // should handle updating the list on next navigation.
+            // manually trigger a re-fetch or rely on navigation. The revalidation
+            // should handle updating the list on the next page view.
         } else {
             console.error(result.error);
             // In a real app, show a toast notification for the error.
