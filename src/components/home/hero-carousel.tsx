@@ -18,7 +18,7 @@ import { Button } from '../ui/button';
 
 export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
   const plugin = React.useRef(
-    Autoplay({ delay: 200, stopOnInteraction: true })
+    Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
   if (!banners || banners.length === 0) {
