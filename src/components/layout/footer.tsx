@@ -7,12 +7,16 @@ export default function Footer() {
     <footer className="bg-[#37342C] text-white border-t border-t-transparent">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <Link href="/" className="flex flex-col items-start">
+          <div className="md:col-span-1">
+            <Link href="/" className="inline-block">
                 <Image src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
             </Link>
-            <p className="mt-4 text-sm text-white/80 max-w-xs">Emoré brings you premium fashion imported from Italy, crafted for both men and women. Our Collections rooted in Old money elegance, yet each piece is with timeless quality and modern sophistication with the best quality fabrics to ensure timeless style and a perfect fit—so you always look and feel your absolute best.</p>
           </div>
+           <div className="md:col-span-3">
+             <p className="text-sm text-white/80">Emoré brings you premium fashion imported from Italy, crafted for both men and women. Our Collections rooted in Old money elegance, yet each piece is with timeless quality and modern sophistication with the best quality fabrics to ensure timeless style and a perfect fit—so you always look and feel your absolute best.</p>
+           </div>
+        </div>
+         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-8">
           <div>
             <h4 className="text-sm font-semibold tracking-wider uppercase">Shop</h4>
             <ul className="mt-4 space-y-2">
@@ -28,7 +32,7 @@ export default function Footer() {
               <li><Link href="#" className="text-sm text-white/80 hover:text-white">Contact</Link></li>
             </ul>
           </div>
-          <div>
+          <div className="md:col-span-2">
             <h4 className="text-sm font-semibold tracking-wider uppercase">Follow Us</h4>
             <div className="flex mt-4 space-x-4">
               <Link href="#" className="text-white/80 hover:text-white"><Twitter size={20} /></Link>
