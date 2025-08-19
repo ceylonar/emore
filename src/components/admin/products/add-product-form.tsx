@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import type { ProductCategory } from '@/lib/types';
@@ -137,23 +137,27 @@ export default function AddProductForm() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="t-shirts">T-shirts</SelectItem>
-                                    <SelectItem value="polos">Polos</SelectItem>
-                                    <SelectItem value="denims">Denims</SelectItem>
-                                    <SelectItem value="trousers">Trousers</SelectItem>
-                                    <SelectItem value="shorts">Shorts</SelectItem>
-                                    <SelectItem value="hoodies">Hoodies</SelectItem>
-                                    <SelectItem value="formal-shirts">Formal shirts</SelectItem>
-                                    <SelectItem value="tops">Tops</SelectItem>
-                                    <SelectItem value="skirts-and-dresses">Skirts & Dresses</SelectItem>
-                                    <SelectItem value="hoodies-and-jackets">Hoodies & Jackets</SelectItem>
-                                    <SelectItem value="dresses">Dresses</SelectItem>
-                                    <SelectItem value="sweaters">Sweaters</SelectItem>
-                                    <SelectItem value="belts">Belts</SelectItem>
-                                    <SelectItem value="scarves">Scarves</SelectItem>
-                                    <SelectItem value="slides">Slides</SelectItem>
-                                    <SelectItem value="caps">Caps</SelectItem>
-                                    <SelectItem value="accessories">Accessories</SelectItem>
+                                    <SelectGroup>
+                                        <SelectLabel>Men</SelectLabel>
+                                        <SelectItem value="t-shirts">T-shirts</SelectItem>
+                                        <SelectItem value="polos">Polos</SelectItem>
+                                        <SelectItem value="denims">Denims</SelectItem>
+                                        <SelectItem value="trousers">Trousers</SelectItem>
+                                        <SelectItem value="shorts">Shorts</SelectItem>
+                                        <SelectItem value="hoodies">Hoodies</SelectItem>
+                                    </SelectGroup>
+                                    <SelectGroup>
+                                        <SelectLabel>Women</SelectLabel>
+                                        <SelectItem value="formal-shirts">Formal shirts</SelectItem>
+                                        <SelectItem value="tops">Tops</SelectItem>
+                                        <SelectItem value="skirts-and-dresses">Skirts & Dresses</SelectItem>
+                                        <SelectItem value="hoodies-and-jackets">Hoodies & Jackets</SelectItem>
+                                    </SelectGroup>
+                                    <SelectGroup>
+                                        <SelectLabel>Accessories</SelectLabel>
+                                        <SelectItem value="slides">Slides</SelectItem>
+                                        <SelectItem value="caps">Caps</SelectItem>
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
