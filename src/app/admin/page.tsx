@@ -20,6 +20,11 @@ export default async function AdminDashboardPage() {
     const totalProducts = products.length;
     const totalBanners = banners.length;
 
+    const totalValue = products.reduce((sum, product) => {
+        const productStock = product.sizes ? product.sizes.reduce((s, size) => s + size.stock, 0) : 0;
+        return sum + (product.price * productStock);
+    }, 0);
+
     const productsByCategory = products.reduce((acc, product) => {
         const category = product.category || 'uncategorized';
         acc[category] = (acc[category] || 0) + 1;
@@ -35,7 +40,7 @@ export default async function AdminDashboardPage() {
     return (
         <div>
             <h1 className="font-headline text-3xl font-bold mb-8">Admin Dashboard</h1>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Products</CardTitle>
@@ -49,11 +54,21 @@ export default async function AdminDashboardPage() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Stock</CardTitle>
-                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <List className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{totalStock}</div>
                         <p className="text-xs text-muted-foreground">total items in inventory</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Inventory Value</CardTitle>
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">LKR {totalValue.toFixed(2)}</div>
+                        <p className="text-xs text-muted-foreground">total value of all stock</p>
                     </CardContent>
                 </Card>
                 <Card>
