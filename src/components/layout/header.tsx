@@ -101,9 +101,6 @@ export default function Header() {
         </div>
 
         <div className="flex items-center space-x-2">
-           <Button variant="ghost" size="icon" asChild>
-                <Link href="/signup">Sign Up</Link>
-            </Button>
           <Button variant="ghost" size="icon" asChild>
             <Link href="/cart" className="relative">
               <ShoppingBag className="h-6 w-6" />
