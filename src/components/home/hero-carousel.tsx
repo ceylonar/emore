@@ -40,8 +40,8 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
                     data-ai-hint={banner.dataAiHint}
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-black/5 to-transparent md:bg-black/10" />
-                  <div className="relative text-left text-foreground p-8 md:p-12 self-end w-full">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent md:bg-gradient-to-r md:from-black/70 md:via-black/20 md:to-transparent" />
+                  <div className="relative text-left text-foreground p-8 md:p-24 self-center md:self-end w-full max-w-2xl">
                     <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md">
                       {banner.title.split(' ').map((word, i) => <span key={i} className="block">{word}</span>)}
                     </h2>
