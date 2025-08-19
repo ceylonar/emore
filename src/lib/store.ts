@@ -1,14 +1,34 @@
-// This is a mock store. In a real application, use a database like Firestore.
-let whatsAppNumber = '+1234567890'; // Default number
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from './firebase';
+
+const SETTINGS_DOC_ID = 'storeSettings';
+const WHATSAPP_NUMBER_KEY = 'whatsAppNumber';
 
 export const getWhatsAppNumber = async (): Promise<string> => {
-  // In a real app, you'd fetch this from your database.
-  return Promise.resolve(whatsAppNumber);
+  try {
+    const docRef = doc(db, 'settings', SETTINGS_DOC_ID);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists() && docSnap.data()?.[WHATSAPP_NUMBER_KEY]) {
+      return docSnap.data()[WHATSAPP_NUMBER_KEY];
+    } else {
+      // Return a default or initial value if not set
+      return '+1234567890';
+    }
+  } catch (error) {
+    console.error("Error fetching WhatsApp number: ", error);
+    // Return default in case of error
+    return '+1234567890';
+  }
 };
 
 export const setWhatsAppNumber = async (newNumber: string): Promise<void> => {
-  // In a real app, you'd save this to your database.
-  console.log(`[Store] WhatsApp number updated to: ${newNumber}`);
-  whatsAppNumber = newNumber;
-  return Promise.resolve();
+  try {
+    const docRef = doc(db, 'settings', SETTINGS_DOC_ID);
+    await setDoc(docRef, { [WHATSAPP_NUMBER_KEY]: newNumber }, { merge: true });
+    console.log(`[Store] WhatsApp number updated to: ${newNumber}`);
+  } catch (error) {
+    console.error("Error setting WhatsApp number: ", error);
+    // Optionally re-throw or handle the error as needed
+  }
 };
