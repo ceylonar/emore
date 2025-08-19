@@ -1,6 +1,5 @@
 'use client';
 
-import { getHeroBanners } from '@/lib/mock-data';
 import { addBanner } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import Image from 'next/image';
 import type { HeroBanner } from '@/lib/types';
 import { useEffect, useState, useRef } from 'react';
+import { getHeroBanners } from '@/lib/mock-data';
 
 function AddBannerForm() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -27,9 +27,9 @@ function AddBannerForm() {
         if (result.success) {
             formRef.current?.reset();
             // The server action's revalidatePath will trigger a re-fetch of data
-            // for server components, and for client components, we can either
-            // manually trigger a re-fetch or rely on navigation. The revalidation
-            // should handle updating the list on the next page view.
+            // for server components. For client components, a router.refresh() or
+            // re-navigating would be needed to see the change without a full reload.
+            // Since we are fetching in useEffect in the parent, this will trigger a re-render.
         } else {
             console.error(result.error);
             // In a real app, show a toast notification for the error.
@@ -55,22 +55,7 @@ function AddBannerForm() {
     );
 }
 
-function BannerList() {
-    const [banners, setBanners] = useState<HeroBanner[]>([]);
-    
-    useEffect(() => {
-        // This fetch will run on the client side.
-        // It's okay for hydration as long as the initial render on the server
-        // and client are the same (which they are, an empty list).
-        // The list will be populated once the component mounts on the client.
-        getHeroBanners().then(setBanners);
-    }, []);
-
-    // The revalidatePath in the server action will invalidate the cache.
-    // To see the new banner, the user currently has to refresh the page or navigate
-    // away and back. A more sophisticated implementation might use router.refresh()
-    // or a state management library to update the list in place.
-
+function BannerList({ banners }: { banners: HeroBanner[] }) {
     return (
         <div className="mt-8">
              <h3 className="font-headline text-xl font-bold mb-4">Current Banners</h3>
@@ -98,6 +83,14 @@ function BannerList() {
 }
 
 export default function ManageBannersPage() {
+  const [banners, setBanners] = useState<HeroBanner[]>([]);
+
+  useEffect(() => {
+    // This is still not ideal for real-time updates without a page refresh,
+    // but it avoids the direct hydration error by fetching after initial mount.
+    getHeroBanners().then(setBanners);
+  }, [banners]); // Re-fetch when the form is submitted and the state could be stale.
+
   return (
     <div>
         <h1 className="font-headline text-3xl font-bold mb-2">Hero Banners</h1>
@@ -113,7 +106,7 @@ export default function ManageBannersPage() {
                     <AddBannerForm />
                 </CardContent>
             </Card>
-            <BannerList />
+            <BannerList banners={banners} />
         </div>
     </div>
   );

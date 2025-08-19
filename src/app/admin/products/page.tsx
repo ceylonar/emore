@@ -92,13 +92,7 @@ function AddProductForm() {
     );
 }
 
-function ProductList() {
-    const [products, setProducts] = useState<Product[]>([]);
-
-    useEffect(() => {
-        getProducts().then(setProducts);
-    }, []);
-
+function ProductList({ products }: { products: Product[] }) {
     return (
         <div className="mt-8">
              <h3 className="font-headline text-xl font-bold mb-4">Current Products</h3>
@@ -141,6 +135,12 @@ function ProductList() {
 }
 
 export default function ManageProductsPage() {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        getProducts().then(setProducts);
+    }, [products]);
+
   return (
     <div>
         <h1 className="font-headline text-3xl font-bold mb-2">Products</h1>
@@ -155,7 +155,7 @@ export default function ManageProductsPage() {
                     <AddProductForm />
                 </CardContent>
             </Card>
-            <ProductList />
+            <ProductList products={products} />
         </div>
     </div>
   );
