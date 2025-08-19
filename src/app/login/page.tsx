@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
+import { useAuth } from "@/context/auth-provider";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address."),
@@ -29,6 +30,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const { isAdmin } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
@@ -37,12 +39,20 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
+  const handleLoginSuccess = (isAdminLogin: boolean) => {
+    toast({ title: "Login Successful", description: "Welcome back!" });
+    if (isAdminLogin) {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      toast({ title: "Login Successful", description: "Welcome back!" });
-      router.push("/");
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      handleLoginSuccess(userCredential.user.email === 'admin.emore.main@gmail.com');
     } catch (error) {
       const err = error as Error;
       toast({
@@ -59,9 +69,8 @@ export default function LoginPage() {
     setIsGoogleSubmitting(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-      toast({ title: "Login Successful", description: "Welcome!" });
-      router.push("/");
+      const result = await signInWithPopup(auth, provider);
+      handleLoginSuccess(result.user.email === 'admin.emore.main@gmail.com');
     } catch (error) {
        const err = error as Error;
       toast({

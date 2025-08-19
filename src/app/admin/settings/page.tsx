@@ -1,5 +1,5 @@
 import { getWhatsAppNumber } from '@/lib/store';
-import WhatsAppForm from '@/components/superadmin/whatsapp-form';
+import WhatsAppForm from '@/components/admin/settings/whatsapp-form';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 

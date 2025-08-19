@@ -33,7 +33,7 @@ export default function InventoryManagement({ products }: InventoryManagementPro
             </TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead className="hidden md:table-cell">Price</TableHead>
+            <TableHead className="hidden md:table-cell">Price</_c>
             <TableHead>
               <span className="sr-only">Actions</span>
             </TableHead>
