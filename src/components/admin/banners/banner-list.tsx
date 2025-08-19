@@ -58,7 +58,7 @@ export default function BannerList({ banners }: { banners: HeroBanner[] }) {
                         <CardFooter className="flex justify-end gap-2">
                              <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" suppressHydrationWarning>
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </AlertDialogTrigger>
