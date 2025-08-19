@@ -1,5 +1,8 @@
 'use client';
 
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { addProduct } from '@/app/admin/products/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,108 +10,242 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useRef } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import type { ProductCategory } from '@/lib/types';
+import { PlusCircle, Trash2 } from 'lucide-react';
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  price: z.coerce.number().positive('Price must be positive'),
+  category: z.custom<ProductCategory>(),
+  imageUrls: z.array(z.object({ value: z.string().url('Invalid URL') })).min(1, 'At least one image URL is required'),
+  dataAiHint: z.string().optional(),
+  size: z.string().min(1, 'Size is required'),
+  stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
+  featured: z.boolean().default(false),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
 
 export default function AddProductForm() {
-    const formRef = useRef<HTMLFormElement>(null);
+    const form = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            description: '',
+            price: 0,
+            imageUrls: [{ value: '' }],
+            dataAiHint: '',
+            size: '',
+            stock: 0,
+            featured: false,
+        },
+    });
 
-    async function handleAddProduct(formData: FormData) {
-        const name = formData.get('name') as string;
-        const description = formData.get('description') as string;
-        const price = parseFloat(formData.get('price') as string);
-        const category = formData.get('category') as ProductCategory;
-        const imageUrlsRaw = formData.get('imageUrls') as string;
-        const imageUrls = imageUrlsRaw.split('\n').map(url => url.trim()).filter(url => url);
-        const size = formData.get('size') as string;
-        const stock = parseInt(formData.get('stock') as string);
-        const dataAiHint = formData.get('dataAiHint') as string | undefined;
-        const featured = formData.get('featured') === 'on';
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: "imageUrls"
+    });
 
-        if (!name || !description || !price || !category || imageUrls.length === 0 || !size || stock === null) {
-            return;
-        }
-
-        const result = await addProduct({ name, description, price, category, imageUrls, dataAiHint, size, stock, featured });
+    async function onSubmit(data: FormData) {
+        const productData = {
+            ...data,
+            imageUrls: data.imageUrls.map(url => url.value),
+        };
+        
+        const result = await addProduct(productData);
         if (result.success) {
-            formRef.current?.reset();
+            form.reset();
+             form.reset({
+                name: '',
+                description: '',
+                price: 0,
+                imageUrls: [{ value: '' }],
+                dataAiHint: '',
+                size: '',
+                stock: 0,
+                featured: false,
+            });
         } else {
-            // Handle error, e.g. show a toast
+            console.error(result.error);
         }
     }
 
     return (
-        <form ref={formRef} action={handleAddProduct} className="space-y-4">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="name">Product Name</Label>
-                    <Input id="name" name="name" placeholder="e.g. Silk Scarf" required suppressHydrationWarning />
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Product Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. Silk Scarf" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Price</FormLabel>
+                                <FormControl>
+                                    <Input type="number" step="0.01" placeholder="e.g. 49.99" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="price">Price</Label>
-                    <Input id="price" name="price" type="number" step="0.01" placeholder="e.g. 49.99" required suppressHydrationWarning />
+                <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Description</FormLabel>
+                            <FormControl>
+                                <Textarea placeholder="e.g. A finely crafted silk scarf..." {...field} suppressHydrationWarning />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                     <FormField
+                        control={form.control}
+                        name="category"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Category</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger suppressHydrationWarning>
+                                            <SelectValue placeholder="Select a category" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="t-shirts">T-shirts</SelectItem>
+                                        <SelectItem value="polos">Polos</SelectItem>
+                                        <SelectItem value="denims">Denims</SelectItem>
+                                        <SelectItem value="trousers">Trousers</SelectItem>
+                                        <SelectItem value="shorts">Shorts</SelectItem>
+                                        <SelectItem value="hoodies">Hoodies</SelectItem>
+                                        <SelectItem value="dresses">Dresses</SelectItem>
+                                        <SelectItem value="sweaters">Sweaters</SelectItem>
+                                        <SelectItem value="belts">Belts</SelectItem>
+                                        <SelectItem value="scarves">Scarves</SelectItem>
+                                        <SelectItem value="accessories">Accessories</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="size"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Size</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. One Size, Large" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="stock"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Stock</FormLabel>
+                                <FormControl>
+                                    <Input type="number" placeholder="e.g. 100" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
-             </div>
-            <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" placeholder="e.g. A finely crafted silk scarf..." required suppressHydrationWarning />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
-                    <Select name="category" required>
-                        <SelectTrigger suppressHydrationWarning>
-                            <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="t-shirts">T-shirts</SelectItem>
-                            <SelectItem value="polos">Polos</SelectItem>
-                            <SelectItem value="denims">Denims</SelectItem>
-                            <SelectItem value="trousers">Trousers</SelectItem>
-                            <SelectItem value="shorts">Shorts</SelectItem>
-                            <SelectItem value="hoodies">Hoodies</SelectItem>
-                            <SelectItem value="dresses">Dresses</SelectItem>
-                            <SelectItem value="sweaters">Sweaters</SelectItem>
-                            <SelectItem value="belts">Belts</SelectItem>
-                            <SelectItem value="scarves">Scarves</SelectItem>
-                            <SelectItem value="accessories">Accessories</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="size">Size</Label>
-                    <Input id="size" name="size" placeholder="e.g. One Size, Large" required suppressHydrationWarning />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="stock">Stock</Label>
-                    <Input id="stock" name="stock" type="number" placeholder="e.g. 100" required suppressHydrationWarning />
-                </div>
-            </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="imageUrls">Image URLs</Label>
-                    <Textarea id="imageUrls" name="imageUrls" placeholder="Enter one image URL per line" required suppressHydrationWarning />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="dataAiHint">AI Hint (optional)</Label>
-                    <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. product photo" suppressHydrationWarning />
-                </div>
-             </div>
-              <div className="items-top flex space-x-2 pt-2">
-                <Checkbox id="featured" name="featured" suppressHydrationWarning />
-                <div className="grid gap-1.5 leading-none">
-                    <label
-                    htmlFor="featured"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                 <div className="space-y-4">
+                    <Label>Image URLs</Label>
+                    {fields.map((field, index) => (
+                        <div key={field.id} className="flex items-center gap-2">
+                             <FormField
+                                control={form.control}
+                                name={`imageUrls.${index}.value`}
+                                render={({ field }) => (
+                                    <FormItem className="flex-grow">
+                                    <FormControl>
+                                        <Input placeholder="https://placehold.co/600x800.png" {...field} suppressHydrationWarning />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                            <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={fields.length <= 1}>
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                        </div>
+                    ))}
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => append({ value: "" })}
                     >
-                    Show on homepage
-                    </label>
-                    <p className="text-sm text-muted-foreground">
-                    Check this box to feature this product in the "NEW DROPS" section on the homepage.
-                    </p>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Add Image URL
+                    </Button>
                 </div>
-            </div>
-            <Button type="submit" suppressHydrationWarning>Add Product</Button>
-        </form>
+                <div className="space-y-2">
+                    <FormField
+                        control={form.control}
+                        name="dataAiHint"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>AI Hint (optional)</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. product photo" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                 <FormField
+                    control={form.control}
+                    name="featured"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                            <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            suppressHydrationWarning
+                            />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                            <FormLabel>
+                            Show on homepage
+                            </FormLabel>
+                            <p className="text-sm text-muted-foreground">
+                                Check this box to feature this product in the "NEW DROPS" section on the homepage.
+                            </p>
+                        </div>
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit" suppressHydrationWarning>Add Product</Button>
+            </form>
+        </Form>
     );
 }

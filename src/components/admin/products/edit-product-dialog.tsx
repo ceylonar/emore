@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -21,14 +21,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { updateProduct } from '@/app/admin/products/actions';
 import type { Product, ProductCategory } from '@/lib/types';
-import { Edit } from 'lucide-react';
+import { Edit, PlusCircle, Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
   price: z.coerce.number().positive('Price must be positive'),
   category: z.custom<ProductCategory>(),
-  imageUrls: z.string().min(1, 'At least one image URL is required'),
+  imageUrls: z.array(z.object({ value: z.string().url('Invalid URL') })).min(1, 'At least one image URL is required'),
   dataAiHint: z.string().optional(),
   size: z.string().min(1, 'Size is required'),
   stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
@@ -47,7 +47,7 @@ export function EditProductDialog({ product }: { product: Product }) {
       description: product.description,
       price: product.price,
       category: product.category,
-      imageUrls: product.imageUrls ? product.imageUrls.join('\n') : '',
+      imageUrls: product.imageUrls ? product.imageUrls.map(url => ({ value: url })) : [{ value: '' }],
       dataAiHint: product.dataAiHint || '',
       size: product.size,
       stock: product.stock,
@@ -55,9 +55,14 @@ export function EditProductDialog({ product }: { product: Product }) {
     },
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "imageUrls"
+  });
+
   async function onSubmit(data: FormData) {
     const { imageUrls, ...restData } = data;
-    const imageUrlsArray = imageUrls.split('\n').map(url => url.trim()).filter(url => url);
+    const imageUrlsArray = imageUrls.map(urlObj => urlObj.value).filter(url => url);
 
     if (imageUrlsArray.length === 0) {
         form.setError('imageUrls', { type: 'manual', message: 'At least one image URL is required' });
@@ -187,34 +192,51 @@ export function EditProductDialog({ product }: { product: Product }) {
                 )}
                 />
             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                    control={form.control}
-                    name="imageUrls"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Image URLs</FormLabel>
-                        <FormControl>
-                            <Textarea placeholder="Enter one image URL per line" {...field} suppressHydrationWarning />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="dataAiHint"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>AI Hint (optional)</FormLabel>
-                        <FormControl>
-                            <Input placeholder="e.g. product photo" {...field} suppressHydrationWarning />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-             </div>
+            <div className="space-y-4">
+                <Label>Image URLs</Label>
+                {fields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-2">
+                            <FormField
+                            control={form.control}
+                            name={`imageUrls.${index}.value`}
+                            render={({ field }) => (
+                                <FormItem className="flex-grow">
+                                <FormControl>
+                                    <Input placeholder="https://placehold.co/600x800.png" {...field} suppressHydrationWarning />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={fields.length <= 1}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                    </div>
+                ))}
+                 <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => append({ value: "" })}
+                >
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add Image URL
+                </Button>
+                <FormMessage>{form.formState.errors.imageUrls?.message}</FormMessage>
+            </div>
+            <FormField
+                control={form.control}
+                name="dataAiHint"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>AI Hint (optional)</FormLabel>
+                    <FormControl>
+                        <Input placeholder="e.g. product photo" {...field} suppressHydrationWarning />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+            />
              <FormField
                 control={form.control}
                 name="featured"
