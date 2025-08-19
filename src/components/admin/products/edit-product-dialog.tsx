@@ -47,7 +47,7 @@ export function EditProductDialog({ product }: { product: Product }) {
       description: product.description,
       price: product.price,
       category: product.category,
-      imageUrls: product.imageUrls.join('\n'),
+      imageUrls: product.imageUrls ? product.imageUrls.join('\n') : '',
       dataAiHint: product.dataAiHint || '',
       size: product.size,
       stock: product.stock,
