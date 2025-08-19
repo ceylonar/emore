@@ -33,7 +33,8 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const orderId = `EMORE-${Date.now()}`;
-    const adminWhatsAppNumber = '+94716559655'; // Hardcoded number
+    // Using the correct international format for the WhatsApp number.
+    const adminWhatsAppNumber = '94716559655';
 
     let message = `*New Order - ${orderId}*\n\n`;
     message += "*Customer Details:*\n";
@@ -49,9 +50,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     message += `\n*Total: $${totalPrice.toFixed(2)}*`;
 
     const encodedMessage = encodeURIComponent(message);
-    // Sanitize the phone number by removing non-digit characters
-    const sanitizedWhatsAppNumber = adminWhatsAppNumber.replace(/\D/g, '');
-    const whatsappUrl = `https://wa.me/${sanitizedWhatsAppNumber}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
 
     clearCart();
     window.location.href = whatsappUrl;
