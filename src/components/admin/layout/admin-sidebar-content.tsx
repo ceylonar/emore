@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
-import { LayoutDashboard, Package, Settings } from 'lucide-react';
+import { LayoutDashboard, Package, Settings, ImageIcon } from 'lucide-react';
 
 export default function AdminSidebarContent() {
   const pathname = usePathname();
@@ -32,6 +32,14 @@ export default function AdminSidebarContent() {
                              <Link href="/admin/inventory">
                                 <Package/>
                                 <span>Inventory</span>
+                             </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                        <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/hero-banners')}>
+                             <Link href="/admin/hero-banners">
+                                <ImageIcon/>
+                                <span>Hero Banners</span>
                              </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
