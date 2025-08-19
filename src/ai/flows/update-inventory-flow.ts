@@ -29,7 +29,7 @@ const HeroBannerSchema = z.object({
   dataAiHint: z.string().optional(),
 });
 
-export const AddInventoryItemInputSchema = z.union([
+const AddInventoryItemInputSchema = z.union([
   z.object({
     type: z.literal('product'),
     data: ProductSchema,
