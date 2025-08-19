@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
 
 const navLinks = [
@@ -103,10 +103,17 @@ export default function Header() {
                 </Button>
                 </SheetTrigger>
                 <SheetContent side="right">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
+                        <span className="font-headline text-2xl font-bold">Emoré</span>
+                      </Link>
+                    </SheetTitle>
+                    <SheetDescription className="sr-only">
+                      Main navigation menu.
+                    </SheetDescription>
+                  </SheetHeader>
                 <div className="p-6">
-                    <Link href="/" className="flex items-center mb-8" onClick={() => setMobileMenuOpen(false)}>
-                    <span className="font-headline text-2xl font-bold">Emoré</span>
-                    </Link>
                     <NavMenu isMobile />
                 </div>
                 </SheetContent>
