@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EditProductDialog } from './edit-product-dialog';
 import { deleteProduct } from '@/app/admin/products/actions';
-import { Trash2 } from 'lucide-react';
+import { Package, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,13 +55,19 @@ export default function ProductList({ products }: { products: Product[] }) {
                         {products.map((product) => (
                         <TableRow key={product.id}>
                             <TableCell className="hidden sm:table-cell">
-                                <Image
-                                    alt={product.name}
-                                    className="aspect-square rounded-md object-cover"
-                                    height="64"
-                                    src={product.imageUrls[0]}
-                                    width="64"
-                                />
+                                {product.imageUrls && product.imageUrls.length > 0 ? (
+                                    <Image
+                                        alt={product.name}
+                                        className="aspect-square rounded-md object-cover"
+                                        height="64"
+                                        src={product.imageUrls[0]}
+                                        width="64"
+                                    />
+                                ) : (
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-md bg-muted">
+                                        <Package className="h-8 w-8 text-muted-foreground" />
+                                    </div>
+                                )}
                             </TableCell>
                             <TableCell className="font-medium">{product.name}</TableCell>
                             <TableCell>
