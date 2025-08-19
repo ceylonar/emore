@@ -40,7 +40,7 @@ const productSchema = z.object({
   category: z.enum(['men', 'women', 'accessories']),
   size: z.string().min(1, 'Size is required'),
   stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
-  imageUrl: z.string().url('Invalid image URL').min(1, 'Image URL is required'),
+  imageUrl: z.string().min(1, 'Image URL is required'),
   dataAiHint: z.string().optional(),
 });
 
@@ -79,10 +79,11 @@ export default function AddProductDialog({ open, onOpenChange }: AddProductDialo
       form.reset();
       onOpenChange(false);
     } else {
+       const errorMessage = typeof result.error === 'string' ? result.error : 'An unexpected error occurred.';
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to add product. Please try again.',
+        description: errorMessage,
       });
     }
   };

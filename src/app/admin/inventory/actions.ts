@@ -1,9 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { addInventoryItem } from '@/ai/flows/update-inventory-flow';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -30,12 +29,13 @@ export async function addProduct(data: unknown) {
   }
 
   try {
-    await addDoc(collection(db, 'products'), validatedFields.data);
+    await addInventoryItem({ type: 'product', data: validatedFields.data });
     revalidatePath('/admin/inventory');
     revalidatePath('/');
     return { success: true };
   } catch (error) {
-    return { success: false, error: 'Failed to create product.' };
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { success: false, error: `Failed to create product: ${errorMessage}` };
   }
 }
 
@@ -48,7 +48,7 @@ export async function addHeroBanner(data: unknown) {
   }
 
   try {
-    await addDoc(collection(db, 'heroBanners'), validatedFields.data);
+    await addInventoryItem({ type: 'heroBanner', data: validatedFields.data });
     revalidatePath('/admin/inventory');
     revalidatePath('/');
     return { success: true };
