@@ -15,6 +15,7 @@ export async function addBanner(bannerData: Omit<HeroBanner, 'id'>) {
         return { success: true, id: docRef.id };
     } catch (e) {
         console.error("Error adding document: ", e);
-        return { success: false, error: "Failed to add banner" };
+        const errorMessage = e instanceof Error ? e.message : "Unknown error occurred";
+        return { success: false, error: `Failed to add banner: ${errorMessage}` };
     }
 }
