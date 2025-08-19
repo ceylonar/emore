@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
+import Image from 'next/image';
 
 const navLinks = [
   {
@@ -75,7 +76,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <div className="flex items-center">
             <Link href="/" className="flex flex-col items-start">
-                <span className="font-headline text-4xl font-bold tracking-widest">EMORÉ</span>
+                <Image src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
             </Link>
         </div>
 
@@ -110,7 +111,7 @@ export default function Header() {
                   <SheetHeader>
                     <SheetTitle>
                       <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
-                        <span className="font-headline text-2xl font-bold">Emoré</span>
+                         <Image src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
                       </Link>
                     </SheetTitle>
                     <SheetDescription className="sr-only">

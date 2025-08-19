@@ -2,14 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Image as ImageIcon, ExternalLink } from 'lucide-react';
+import { Home, Package, Image as ImageIcon, ExternalLink, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+import NextImage from 'next/image';
 
 const navLinks = [
   { href: '/admin', label: 'Dashboard', icon: Home },
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/banners', label: 'Hero Banners', icon: ImageIcon },
+  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -20,8 +22,8 @@ export default function AdminSidebar() {
       <div className="flex flex-col h-full">
         <div className="p-6">
           <Link href="/" className="flex flex-col items-start">
-             <span className="font-headline text-2xl font-bold tracking-widest">EMORÉ</span>
-             <span className="text-xs tracking-widest">ADMIN</span>
+             <NextImage src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
+             <span className="text-xs tracking-widest -mt-1">ADMIN</span>
           </Link>
         </div>
         <nav className="flex-grow px-4">
