@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState, useFormStatus } from 'react-dom';
-import { handleUpdateWhatsAppNumber } from '@/app/superadmin/actions';
+import { handleUpdateWhatsAppNumber } from '@/app/admin/settings/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -25,7 +25,7 @@ export default function WhatsAppForm({ currentNumber }: { currentNumber: string 
   useEffect(() => {
     if (state?.message) {
       if(state.errors && Object.keys(state.errors).length > 0) {
-        toast({ variant: 'destructive', title: 'Error', description: state.message });
+        toast({ variant: 'destructive', title: 'Error', description: state.errors.whatsAppNumber?.join(', ') || state.message });
       } else {
         toast({ title: 'Success', description: state.message });
       }

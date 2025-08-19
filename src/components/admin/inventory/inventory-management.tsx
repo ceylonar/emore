@@ -11,6 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { useState } from "react"
+import AddProductDialog from "./add-product-dialog"
+import AddBannerDialog from "./add-banner-dialog"
+import { PlusCircle } from "lucide-react"
 
 interface InventoryManagementProps {
   products: Product[];
@@ -18,13 +22,31 @@ interface InventoryManagementProps {
 }
 
 export default function InventoryManagement({ products, banners }: InventoryManagementProps) {
+  const [activeTab, setActiveTab] = useState("products");
+  const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
+  const [isBannerDialogOpen, setIsBannerDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    if (activeTab === "products") {
+      setIsProductDialogOpen(true);
+    } else {
+      setIsBannerDialogOpen(true);
+    }
+  }
+
   return (
     <div className="space-y-8">
-        <div>
-            <h1 className="text-3xl font-bold font-headline">Inventory</h1>
-            <p className="text-muted-foreground">Manage your products, hero banners, and their details.</p>
+        <div className="flex items-center justify-between">
+            <div>
+                <h1 className="text-3xl font-bold font-headline">Inventory</h1>
+                <p className="text-muted-foreground">Manage your products, hero banners, and their details.</p>
+            </div>
+            <Button onClick={openDialog}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add New
+            </Button>
         </div>
-      <Tabs defaultValue="products">
+      <Tabs defaultValue="products" onValueChange={setActiveTab}>
         <div className="flex items-center">
             <TabsList>
                 <TabsTrigger value="products">Products</TabsTrigger>
@@ -112,6 +134,8 @@ export default function InventoryManagement({ products, banners }: InventoryMana
             </Table>
         </TabsContent>
       </Tabs>
+      <AddProductDialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen} />
+      <AddBannerDialog open={isBannerDialogOpen} onOpenChange={setIsBannerDialogOpen} />
     </div>
   )
 }
