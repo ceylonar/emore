@@ -18,17 +18,18 @@ export default function AddProductForm() {
         const description = formData.get('description') as string;
         const price = parseFloat(formData.get('price') as string);
         const category = formData.get('category') as ProductCategory;
-        const imageUrl = formData.get('imageUrl') as string;
+        const imageUrlsRaw = formData.get('imageUrls') as string;
+        const imageUrls = imageUrlsRaw.split('\n').map(url => url.trim()).filter(url => url);
         const size = formData.get('size') as string;
         const stock = parseInt(formData.get('stock') as string);
         const dataAiHint = formData.get('dataAiHint') as string | undefined;
         const featured = formData.get('featured') === 'on';
 
-        if (!name || !description || !price || !category || !imageUrl || !size || stock === null) {
+        if (!name || !description || !price || !category || imageUrls.length === 0 || !size || stock === null) {
             return;
         }
 
-        const result = await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock, featured });
+        const result = await addProduct({ name, description, price, category, imageUrls, dataAiHint, size, stock, featured });
         if (result.success) {
             formRef.current?.reset();
         } else {
@@ -85,8 +86,8 @@ export default function AddProductForm() {
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="imageUrl">Image URL</Label>
-                    <Input id="imageUrl" name="imageUrl" placeholder="https://placehold.co/600x800.png" required suppressHydrationWarning />
+                    <Label htmlFor="imageUrls">Image URLs</Label>
+                    <Textarea id="imageUrls" name="imageUrls" placeholder="Enter one image URL per line" required suppressHydrationWarning />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="dataAiHint">AI Hint (optional)</Label>

@@ -2,9 +2,6 @@
 
 import type { CartItem } from '@/lib/types';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-// We are not using useToast here anymore because we'll show a more prominent notification
-// in a real app, you might want to use a toast for less intrusive notifications.
-// import { useToast } from "@/hooks/use-toast"; 
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -20,7 +17,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  // const { toast } = useToast();
 
   useEffect(() => {
     try {
@@ -51,11 +47,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });
-    // Removed toast for a cleaner UX, but you can re-enable if you prefer
-    // toast({
-    //   title: "Added to cart",
-    //   description: `${item.name} is now in your cart.`,
-    // });
   }, []);
 
   const removeFromCart = useCallback((id: string) => {

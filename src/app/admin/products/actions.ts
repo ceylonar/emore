@@ -12,6 +12,7 @@ export async function addProduct(productData: Omit<Product, 'id'>) {
         console.log("Document written with ID: ", docRef.id);
         revalidatePath('/admin/products');
         revalidatePath('/');
+        revalidatePath(`/product/${docRef.id}`);
         return { success: true, id: docRef.id };
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -26,6 +27,7 @@ export async function updateProduct(productId: string, productData: Partial<Omit
         await updateDoc(productRef, productData);
         revalidatePath('/admin/products');
         revalidatePath('/');
+        revalidatePath(`/product/${productId}`);
         return { success: true };
     } catch (e) {
         console.error("Error updating document: ", e);

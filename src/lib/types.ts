@@ -17,7 +17,7 @@ export interface Product {
   description: string;
   price: number;
   category: ProductCategory;
-  imageUrl: string;
+  imageUrls: string[];
   dataAiHint?: string;
   size: string;
   stock: number;
@@ -37,6 +37,6 @@ export interface CartItem {
   id: string;
   name: string;
   price: number;
-  imageUrl: string;
+  imageUrl: string; // Keep as single URL for cart simplicity
   quantity: number;
 }

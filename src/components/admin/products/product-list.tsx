@@ -59,7 +59,7 @@ export default function ProductList({ products }: { products: Product[] }) {
                                     alt={product.name}
                                     className="aspect-square rounded-md object-cover"
                                     height="64"
-                                    src={product.imageUrl}
+                                    src={product.imageUrls[0]}
                                     width="64"
                                 />
                             </TableCell>

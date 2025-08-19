@@ -28,7 +28,7 @@ const formSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   price: z.coerce.number().positive('Price must be positive'),
   category: z.custom<ProductCategory>(),
-  imageUrl: z.string().url('Must be a valid URL'),
+  imageUrls: z.string().min(1, 'At least one image URL is required'),
   dataAiHint: z.string().optional(),
   size: z.string().min(1, 'Size is required'),
   stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
@@ -47,7 +47,7 @@ export function EditProductDialog({ product }: { product: Product }) {
       description: product.description,
       price: product.price,
       category: product.category,
-      imageUrl: product.imageUrl,
+      imageUrls: product.imageUrls.join('\n'),
       dataAiHint: product.dataAiHint || '',
       size: product.size,
       stock: product.stock,
@@ -56,12 +56,19 @@ export function EditProductDialog({ product }: { product: Product }) {
   });
 
   async function onSubmit(data: FormData) {
-    const result = await updateProduct(product.id, data);
+    const { imageUrls, ...restData } = data;
+    const imageUrlsArray = imageUrls.split('\n').map(url => url.trim()).filter(url => url);
+
+    if (imageUrlsArray.length === 0) {
+        form.setError('imageUrls', { type: 'manual', message: 'At least one image URL is required' });
+        return;
+    }
+
+    const result = await updateProduct(product.id, { ...restData, imageUrls: imageUrlsArray });
     if (result.success) {
       setIsOpen(false);
     } else {
       console.error(result.error);
-      // You could use a toast to show the error to the user
     }
   }
 
@@ -183,12 +190,12 @@ export function EditProductDialog({ product }: { product: Product }) {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                     control={form.control}
-                    name="imageUrl"
+                    name="imageUrls"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Image URL</FormLabel>
+                        <FormLabel>Image URLs</FormLabel>
                         <FormControl>
-                            <Input placeholder="https://placehold.co/600x800.png" {...field} suppressHydrationWarning />
+                            <Textarea placeholder="Enter one image URL per line" {...field} suppressHydrationWarning />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
