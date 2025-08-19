@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'content-management-files.canva.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 };
