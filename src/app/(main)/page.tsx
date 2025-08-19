@@ -45,8 +45,9 @@ export default function HomePage() {
 }
 
 async function ProductGridLoader() {
-  const products = await getProducts();
-  return <ProductGrid products={products} />;
+  const allProducts = await getProducts();
+  const featuredProducts = allProducts.filter(p => p.featured);
+  return <ProductGrid products={featuredProducts} />;
 }
 
 async function HeroCarouselLoader() {

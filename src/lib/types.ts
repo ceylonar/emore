@@ -21,6 +21,7 @@ export interface Product {
   dataAiHint?: string;
   size: string;
   stock: number;
+  featured?: boolean;
 }
 
 export interface HeroBanner {

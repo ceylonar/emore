@@ -18,6 +18,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { updateProduct } from '@/app/admin/products/actions';
 import type { Product, ProductCategory } from '@/lib/types';
 import { Edit } from 'lucide-react';
@@ -31,6 +32,7 @@ const formSchema = z.object({
   dataAiHint: z.string().optional(),
   size: z.string().min(1, 'Size is required'),
   stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
+  featured: z.boolean().default(false),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -49,6 +51,7 @@ export function EditProductDialog({ product }: { product: Product }) {
       dataAiHint: product.dataAiHint || '',
       size: product.size,
       stock: product.stock,
+      featured: product.featured || false,
     },
   });
 
@@ -205,6 +208,26 @@ export function EditProductDialog({ product }: { product: Product }) {
                     )}
                 />
              </div>
+             <FormField
+                control={form.control}
+                name="featured"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                        <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        suppressHydrationWarning
+                        />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                        <FormLabel>
+                        Show on homepage
+                        </FormLabel>
+                    </div>
+                    </FormItem>
+                )}
+                />
             <DialogFooter>
               <Button type="submit" suppressHydrationWarning>Save Changes</Button>
             </DialogFooter>

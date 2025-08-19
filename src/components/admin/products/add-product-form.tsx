@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useRef } from 'react';
 import type { ProductCategory } from '@/lib/types';
 
@@ -21,12 +22,13 @@ export default function AddProductForm() {
         const size = formData.get('size') as string;
         const stock = parseInt(formData.get('stock') as string);
         const dataAiHint = formData.get('dataAiHint') as string | undefined;
+        const featured = formData.get('featured') === 'on';
 
-        if (!name || !description || !price || !category || !imageUrl || !size || !stock) {
+        if (!name || !description || !price || !category || !imageUrl || !size || stock === null) {
             return;
         }
 
-        const result = await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock });
+        const result = await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock, featured });
         if (result.success) {
             formRef.current?.reset();
         } else {
@@ -91,6 +93,20 @@ export default function AddProductForm() {
                     <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. product photo" suppressHydrationWarning />
                 </div>
              </div>
+              <div className="items-top flex space-x-2 pt-2">
+                <Checkbox id="featured" name="featured" suppressHydrationWarning />
+                <div className="grid gap-1.5 leading-none">
+                    <label
+                    htmlFor="featured"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                    Show on homepage
+                    </label>
+                    <p className="text-sm text-muted-foreground">
+                    Check this box to feature this product in the "NEW DROPS" section on the homepage.
+                    </p>
+                </div>
+            </div>
             <Button type="submit" suppressHydrationWarning>Add Product</Button>
         </form>
     );
