@@ -30,9 +30,6 @@ export default function InventoryManagement({ products, banners }: InventoryMana
                 <TabsTrigger value="products">Products</TabsTrigger>
                 <TabsTrigger value="hero">Hero Banners</TabsTrigger>
             </TabsList>
-            <div className="ml-auto">
-                 <Button>Add New</Button>
-            </div>
         </div>
         <TabsContent value="products">
             <Table>
