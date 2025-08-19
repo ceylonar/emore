@@ -16,7 +16,7 @@ import { Button } from '../ui/button';
 
 export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
   const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true })
   );
 
   return (
@@ -27,26 +27,26 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
-        {banners.map((banner) => (
+        {banners.map((banner, index) => (
           <CarouselItem key={banner.id}>
             <div className="relative">
               <Card className="border-none rounded-none">
-                <CardContent className="relative flex aspect-[2/1] items-center justify-center p-0">
+                <CardContent className="relative flex aspect-[3/4] md:aspect-[2/1] items-center justify-center p-0">
                   <Image
                     src={banner.imageUrl}
                     alt={banner.title}
                     fill
                     className="object-cover"
                     data-ai-hint={banner.dataAiHint}
-                    priority={banner.id === '1'}
+                    priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-black/40" />
-                  <div className="relative text-center text-white p-4">
-                    <h2 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-                      {banner.title}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-black/5 to-transparent md:bg-black/10" />
+                  <div className="relative text-left text-foreground p-8 md:p-12 self-end w-full">
+                    <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md">
+                      {banner.title.split(' ').map((word, i) => <span key={i} className="block">{word}</span>)}
                     </h2>
-                    <Button asChild size="lg" className="mt-8 rounded-full font-bold">
-                      <Link href="/#products">Shop Now</Link>
+                    <Button asChild size="lg" className="mt-6 rounded-full font-bold px-8 py-6 text-sm bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg">
+                      <Link href="/#products">SHOP NOW</Link>
                     </Button>
                   </div>
                 </CardContent>
