@@ -13,12 +13,12 @@ export const getWhatsAppNumber = async (): Promise<string> => {
       return docSnap.data()[WHATSAPP_NUMBER_KEY];
     } else {
       // Return a default or initial value if not set
-      return '+1234567890';
+      return '+94751131033';
     }
   } catch (error) {
     console.error("Error fetching WhatsApp number: ", error);
     // Return default in case of error
-    return '+1234567890';
+    return '+94751131033';
   }
 };
 

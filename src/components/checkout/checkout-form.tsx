@@ -12,9 +12,7 @@ import { Separator } from '@/components/ui/separator';
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   address: z.string().min(5, 'Please enter a valid address.'),
-  city: z.string().min(2, 'Please enter a valid city.'),
-  postalCode: z.string().min(4, 'Please enter a valid postal code.'),
-  country: z.string().min(2, 'Please enter a valid country.'),
+  mobileNumber: z.string().min(10, 'Please enter a valid mobile number.'),
 });
 
 interface CheckoutFormProps {
@@ -29,9 +27,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     defaultValues: {
       name: '',
       address: '',
-      city: '',
-      postalCode: '',
-      country: '',
+      mobileNumber: '',
     },
   });
 
@@ -41,7 +37,8 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     let message = `*New Order - ${orderId}*\n\n`;
     message += "*Customer Details:*\n";
     message += `Name: ${values.name}\n`;
-    message += `Address: ${values.address}, ${values.city}, ${values.postalCode}, ${values.country}\n\n`;
+    message += `Address: ${values.address}\n`;
+    message += `Mobile: ${values.mobileNumber}\n\n`;
 
     message += "*Order Items:*\n";
     cartItems.forEach(item => {
@@ -83,55 +80,27 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="123 Main St" {...field} />
+                    <Input placeholder="123 Main St, Colombo" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <FormControl>
-                        <Input placeholder="New York" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                 <FormField
-                control={form.control}
-                name="postalCode"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
-                    <FormControl>
-                        <Input placeholder="10001" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                 <FormField
-                control={form.control}
-                name="country"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Country</FormLabel>
-                    <FormControl>
-                        <Input placeholder="USA" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-            </div>
+             <FormField
+              control={form.control}
+              name="mobileNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mobile Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 0771234567" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             
-            <Button type="submit" size="lg" className="w-full mt-4">Place Order via WhatsApp</Button>
+            <Button type="submit" size="lg" className="w-full mt-4">Confirm Order</Button>
           </form>
         </Form>
       </div>
