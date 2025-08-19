@@ -33,7 +33,7 @@ export default function InventoryManagement({ products }: InventoryManagementPro
             </TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead className="hidden md:table-cell">Price</_c>
+            <TableHead className="hidden md:table-cell">Price</TableHead>
             <TableHead>
               <span className="sr-only">Actions</span>
             </TableHead>
@@ -49,6 +49,7 @@ export default function InventoryManagement({ products }: InventoryManagementPro
                   height="64"
                   src={product.imageUrl}
                   width="64"
+                  data-ai-hint={product.dataAiHint}
                 />
               </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
