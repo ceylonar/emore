@@ -18,8 +18,12 @@ const navLinks = [
     title: 'MEN',
     href: '/men',
     items: [
-      { title: 'Shirts', href: '/men/shirts' },
+      { title: 'T-shirts', href: '/men/tshirts' },
+      { title: 'Polos', href: '/men/polos' },
+      { title: 'Denims', href: '/men/denims' },
       { title: 'Trousers', href: '/men/trousers' },
+      { title: 'Shorts', href: '/men/shorts' },
+      { title: 'Hoodies', href: '/men/hoodies' },
     ]
   },
   {

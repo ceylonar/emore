@@ -1,9 +1,22 @@
+export type ProductCategory =
+  | 't-shirts'
+  | 'polos'
+  | 'denims'
+  | 'trousers'
+  | 'shorts'
+  | 'hoodies'
+  | 'dresses'
+  | 'sweaters'
+  | 'belts'
+  | 'scarves'
+  | 'accessories';
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  category: 'men' | 'women' | 'accessories';
+  category: ProductCategory;
   imageUrl: string;
   dataAiHint?: string;
   size: string;

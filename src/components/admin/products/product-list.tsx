@@ -2,6 +2,11 @@ import Image from 'next/image';
 import type { Product } from '@/lib/types';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+
+function formatCategory(category: string) {
+    return category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
 
 export default function ProductList({ products }: { products: Product[] }) {
     return (
@@ -33,7 +38,9 @@ export default function ProductList({ products }: { products: Product[] }) {
                                 />
                             </TableCell>
                             <TableCell className="font-medium">{product.name}</TableCell>
-                            <TableCell>{product.category}</TableCell>
+                            <TableCell>
+                                <Badge variant="secondary">{formatCategory(product.category)}</Badge>
+                            </TableCell>
                             <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
                             <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
                         </TableRow>

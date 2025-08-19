@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRef } from 'react';
+import type { ProductCategory } from '@/lib/types';
 
 export default function AddProductForm() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -15,7 +16,7 @@ export default function AddProductForm() {
         const name = formData.get('name') as string;
         const description = formData.get('description') as string;
         const price = parseFloat(formData.get('price') as string);
-        const category = formData.get('category') as 'men' | 'women' | 'accessories';
+        const category = formData.get('category') as ProductCategory;
         const imageUrl = formData.get('imageUrl') as string;
         const size = formData.get('size') as string;
         const stock = parseInt(formData.get('stock') as string);
@@ -57,8 +58,16 @@ export default function AddProductForm() {
                             <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="women">Women</SelectItem>
-                            <SelectItem value="men">Men</SelectItem>
+                            <SelectItem value="t-shirts">T-shirts</SelectItem>
+                            <SelectItem value="polos">Polos</SelectItem>
+                            <SelectItem value="denims">Denims</SelectItem>
+                            <SelectItem value="trousers">Trousers</SelectItem>
+                            <SelectItem value="shorts">Shorts</SelectItem>
+                            <SelectItem value="hoodies">Hoodies</SelectItem>
+                            <SelectItem value="dresses">Dresses</SelectItem>
+                            <SelectItem value="sweaters">Sweaters</SelectItem>
+                            <SelectItem value="belts">Belts</SelectItem>
+                            <SelectItem value="scarves">Scarves</SelectItem>
                             <SelectItem value="accessories">Accessories</SelectItem>
                         </SelectContent>
                     </Select>
