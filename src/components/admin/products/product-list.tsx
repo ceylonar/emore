@@ -3,9 +3,32 @@ import type { Product } from '@/lib/types';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { EditProductDialog } from './edit-product-dialog';
+import { deleteProduct } from '@/app/admin/products/actions';
+import { Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 function formatCategory(category: string) {
     return category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+async function handleDelete(productId: string) {
+    const result = await deleteProduct(productId);
+    if (!result.success) {
+        console.error(result.error);
+        // Optionally show a toast notification on error
+    }
 }
 
 export default function ProductList({ products }: { products: Product[] }) {
@@ -23,6 +46,9 @@ export default function ProductList({ products }: { products: Product[] }) {
                         <TableHead>Category</TableHead>
                         <TableHead className="hidden md:table-cell">Price</TableHead>
                         <TableHead className="hidden md:table-cell">Stock</TableHead>
+                        <TableHead>
+                            <span className="sr-only">Actions</span>
+                        </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -43,6 +69,36 @@ export default function ProductList({ products }: { products: Product[] }) {
                             </TableCell>
                             <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
                             <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
+                             <TableCell>
+                                <div className="flex justify-end gap-2">
+                                     <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" suppressHydrationWarning>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete this
+                                            product.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction
+                                            onClick={() => handleDelete(product.id)}
+                                            className="bg-destructive hover:bg-destructive/90"
+                                            >
+                                                Delete
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                    <EditProductDialog product={product} />
+                                </div>
+                            </TableCell>
                         </TableRow>
                         ))}
                     </TableBody>
