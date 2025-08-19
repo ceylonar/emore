@@ -15,6 +15,8 @@ export interface HeroBanner {
   title: string;
   imageUrl: string;
   dataAiHint?: string;
+  description?: string;
+  offerDetails?: string;
 }
 
 export interface CartItem {

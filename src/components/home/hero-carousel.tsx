@@ -15,10 +15,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
 
 export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 4000, stopOnInteraction: true })
   );
 
   if (!banners || banners.length === 0) {
@@ -51,9 +52,11 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent md:bg-gradient-to-r md:from-black/70 md:via-black/20 md:to-transparent" />
                   <div className="relative text-left text-foreground p-8 md:p-24 self-center md:self-end w-full max-w-2xl">
+                    {banner.offerDetails && <Badge variant="secondary" className="mb-2 text-lg">{banner.offerDetails}</Badge>}
                     <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md">
                       {banner.title.split(' ').map((word, i) => <span key={i} className="block">{word}</span>)}
                     </h2>
+                    {banner.description && <p className="mt-4 text-lg text-white/90 drop-shadow-sm max-w-lg">{banner.description}</p>}
                     <Button asChild size="lg" className="mt-6 rounded-full font-bold px-8 py-6 text-sm bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg">
                       <Link href="/#products">SHOP NOW</Link>
                     </Button>

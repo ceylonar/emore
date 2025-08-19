@@ -16,12 +16,15 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { updateBanner } from '@/app/admin/banners/actions';
 import type { HeroBanner } from '@/lib/types';
 import { Edit } from 'lucide-react';
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
+  description: z.string().optional(),
+  offerDetails: z.string().optional(),
   imageUrl: z.string().url({ message: 'Please enter a valid URL' }),
   dataAiHint: z.string().optional(),
 });
@@ -35,6 +38,8 @@ export function EditBannerDialog({ banner }: { banner: HeroBanner }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: banner.title,
+      description: banner.description || '',
+      offerDetails: banner.offerDetails || '',
       imageUrl: banner.imageUrl,
       dataAiHint: banner.dataAiHint || '',
     },
@@ -74,6 +79,32 @@ export function EditBannerDialog({ banner }: { banner: HeroBanner }) {
                   <FormLabel>Banner Title</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Summer Collection" {...field} suppressHydrationWarning />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (optional)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Short description for the banner" {...field} suppressHydrationWarning />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="offerDetails"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Offer Details (optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 20% OFF" {...field} suppressHydrationWarning />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
