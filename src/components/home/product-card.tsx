@@ -15,19 +15,22 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const hasImage = product.imageUrls && product.imageUrls.length > 0;
+  const totalStock = product.sizes ? product.sizes.reduce((total, s) => total + s.stock, 0) : 0;
+  const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes.find(s => s.stock > 0)?.size : undefined;
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // prevent navigation when clicking the button
-    if (hasImage) {
+    e.preventDefault(); 
+    if (hasImage && defaultSize) {
         addToCart({
-            id: product.id,
+            id: `${product.id}-${defaultSize}`,
+            productId: product.id,
             name: product.name,
             price: product.price,
             imageUrl: product.imageUrls[0],
+            size: defaultSize,
         });
     } else {
-        // Optionally handle case where there is no image, e.g. show a toast
-        console.warn("Cannot add to cart: product has no image.");
+        console.warn("Cannot add to cart: product has no image or no available size.");
     }
   };
 
@@ -57,8 +60,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           <CardDescription className="pt-2 text-base">${product.price.toFixed(2)}</CardDescription>
         </CardHeader>
         <CardFooter className="p-0 mt-auto pt-4 flex-col gap-2 items-center">
-          <Button onClick={handleAddToCart} className="w-full rounded-full" variant="secondary" disabled={!hasImage}>
-            Add to Cart
+           <Button asChild className="w-full rounded-full" variant="secondary">
+            <Link href={`/product/${product.id}`}>
+              {totalStock > 0 ? 'Select Size' : 'Out of Stock'}
+            </Link>
           </Button>
         </CardFooter>
       </Card>

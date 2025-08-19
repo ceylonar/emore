@@ -49,9 +49,12 @@ export default function CartView() {
               <div className="ml-0 mt-4 sm:ml-4 sm:mt-0 flex flex-1 flex-col justify-between">
                 <div>
                   <div className="flex justify-between text-base font-medium">
-                    <h3 className="font-headline text-lg">
-                      <Link href={`/product/${item.id}`}>{item.name}</Link>
-                    </h3>
+                    <div>
+                      <h3 className="font-headline text-lg">
+                        <Link href={`/product/${item.productId}`}>{item.name}</Link>
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">Size: {item.size}</p>
+                    </div>
                     <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>

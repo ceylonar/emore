@@ -1,12 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getProducts, getHeroBanners } from "@/lib/mock-data";
 import { DollarSign, Package, Image as ImageIcon } from "lucide-react";
+import type { Product } from "@/lib/types";
 
 export default async function AdminDashboardPage() {
-    const products = await getProducts();
+    const products: Product[] = await getProducts();
     const banners = await getHeroBanners();
 
-    const totalStock = products.reduce((sum, product) => sum + product.stock, 0);
+    const totalStock = products.reduce((sum, product) => {
+        const productStock = product.sizes ? product.sizes.reduce((s, size) => s + size.stock, 0) : 0;
+        return sum + productStock;
+    }, 0);
     const totalProducts = products.length;
     const totalBanners = banners.length;
 

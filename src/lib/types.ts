@@ -11,6 +11,11 @@ export type ProductCategory =
   | 'scarves'
   | 'accessories';
 
+export interface SizeStock {
+  size: string;
+  stock: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -19,8 +24,7 @@ export interface Product {
   category: ProductCategory;
   imageUrls: string[];
   dataAiHint?: string;
-  size: string;
-  stock: number;
+  sizes: SizeStock[];
   featured?: boolean;
 }
 
@@ -34,9 +38,11 @@ export interface HeroBanner {
 }
 
 export interface CartItem {
-  id: string;
+  id: string; // This will be composite key: productId-size
+  productId: string;
   name: string;
   price: number;
-  imageUrl: string; // Keep as single URL for cart simplicity
+  imageUrl: string;
   quantity: number;
+  size: string;
 }

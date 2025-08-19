@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: Omit<CartItem, 'quantity' | 'id'> & { id: string }) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id:string, quantity: number) => void;
   clearCart: () => void;
@@ -37,15 +37,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [cartItems]);
 
-  const addToCart = useCallback((item: Omit<CartItem, 'quantity'>) => {
+  const addToCart = useCallback((itemToAdd: Omit<CartItem, 'quantity'>) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(i => i.id === item.id);
+      const existingItem = prevItems.find(i => i.id === itemToAdd.id);
       if (existingItem) {
         return prevItems.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === itemToAdd.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, { ...itemToAdd, quantity: 1 }];
     });
   }, []);
 

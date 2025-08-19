@@ -14,6 +14,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import type { ProductCategory } from '@/lib/types';
 import { PlusCircle, Trash2 } from 'lucide-react';
 
+const sizeStockSchema = z.object({
+  size: z.string().min(1, 'Size is required'),
+  stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
+});
+
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
@@ -21,8 +26,7 @@ const formSchema = z.object({
   category: z.custom<ProductCategory>(),
   imageUrls: z.array(z.object({ value: z.string().url('Invalid URL') })).min(1, 'At least one image URL is required'),
   dataAiHint: z.string().optional(),
-  size: z.string().min(1, 'Size is required'),
-  stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
+  sizes: z.array(sizeStockSchema).min(1, 'At least one size is required'),
   featured: z.boolean().default(false),
 });
 
@@ -38,15 +42,19 @@ export default function AddProductForm() {
             price: 0,
             imageUrls: [{ value: '' }],
             dataAiHint: '',
-            size: '',
-            stock: 0,
+            sizes: [{ size: '', stock: 0 }],
             featured: false,
         },
     });
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields: imageUrlFields, append: appendImageUrl, remove: removeImageUrl } = useFieldArray({
         control: form.control,
         name: "imageUrls"
+    });
+
+    const { fields: sizeFields, append: appendSize, remove: removeSize } = useFieldArray({
+        control: form.control,
+        name: "sizes"
     });
 
     async function onSubmit(data: FormData) {
@@ -64,8 +72,7 @@ export default function AddProductForm() {
                 price: 0,
                 imageUrls: [{ value: '' }],
                 dataAiHint: '',
-                size: '',
-                stock: 0,
+                sizes: [{size: '', stock: 0}],
                 featured: false,
             });
         } else {
@@ -75,7 +82,7 @@ export default function AddProductForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                         control={form.control}
@@ -117,67 +124,86 @@ export default function AddProductForm() {
                         </FormItem>
                     )}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                     <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger suppressHydrationWarning>
-                                            <SelectValue placeholder="Select a category" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="t-shirts">T-shirts</SelectItem>
-                                        <SelectItem value="polos">Polos</SelectItem>
-                                        <SelectItem value="denims">Denims</SelectItem>
-                                        <SelectItem value="trousers">Trousers</SelectItem>
-                                        <SelectItem value="shorts">Shorts</SelectItem>
-                                        <SelectItem value="hoodies">Hoodies</SelectItem>
-                                        <SelectItem value="dresses">Dresses</SelectItem>
-                                        <SelectItem value="sweaters">Sweaters</SelectItem>
-                                        <SelectItem value="belts">Belts</SelectItem>
-                                        <SelectItem value="scarves">Scarves</SelectItem>
-                                        <SelectItem value="accessories">Accessories</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="size"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Size</FormLabel>
+                 <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Category</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                    <Input placeholder="e.g. One Size, Large" {...field} suppressHydrationWarning />
+                                    <SelectTrigger suppressHydrationWarning>
+                                        <SelectValue placeholder="Select a category" />
+                                    </SelectTrigger>
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="stock"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Stock</FormLabel>
-                                <FormControl>
-                                    <Input type="number" placeholder="e.g. 100" {...field} suppressHydrationWarning />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <SelectContent>
+                                    <SelectItem value="t-shirts">T-shirts</SelectItem>
+                                    <SelectItem value="polos">Polos</SelectItem>
+                                    <SelectItem value="denims">Denims</SelectItem>
+                                    <SelectItem value="trousers">Trousers</SelectItem>
+                                    <SelectItem value="shorts">Shorts</SelectItem>
+                                    <SelectItem value="hoodies">Hoodies</SelectItem>
+                                    <SelectItem value="dresses">Dresses</SelectItem>
+                                    <SelectItem value="sweaters">Sweaters</SelectItem>
+                                    <SelectItem value="belts">Belts</SelectItem>
+                                    <SelectItem value="scarves">Scarves</SelectItem>
+                                    <SelectItem value="accessories">Accessories</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <div className="space-y-4 rounded-md border p-4">
+                    <Label className="font-semibold">Sizes & Stock</Label>
+                    {sizeFields.map((field, index) => (
+                        <div key={field.id} className="grid grid-cols-3 items-center gap-2">
+                             <FormField
+                                control={form.control}
+                                name={`sizes.${index}.size`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="sr-only">Size</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g. Medium" {...field} suppressHydrationWarning />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                            <FormField
+                                control={form.control}
+                                name={`sizes.${index}.stock`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="sr-only">Stock</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" placeholder="e.g. 100" {...field} suppressHydrationWarning />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="button" variant="ghost" size="icon" onClick={() => removeSize(index)} disabled={sizeFields.length <= 1} suppressHydrationWarning>
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                        </div>
+                    ))}
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => appendSize({ size: "", stock: 0 })}
+                        suppressHydrationWarning
+                    >
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Add Size
+                    </Button>
+                    <FormMessage>{form.formState.errors.sizes?.root?.message}</FormMessage>
                 </div>
-                 <div className="space-y-4">
-                    <Label>Image URLs</Label>
-                    {fields.map((field, index) => (
+                 <div className="space-y-4 rounded-md border p-4">
+                    <Label className="font-semibold">Image URLs</Label>
+                    {imageUrlFields.map((field, index) => (
                         <div key={field.id} className="flex items-center gap-2">
                              <FormField
                                 control={form.control}
@@ -191,7 +217,7 @@ export default function AddProductForm() {
                                     </FormItem>
                                 )}
                                 />
-                            <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={fields.length <= 1} suppressHydrationWarning>
+                            <Button type="button" variant="ghost" size="icon" onClick={() => removeImageUrl(index)} disabled={imageUrlFields.length <= 1} suppressHydrationWarning>
                                 <Trash2 className="h-4 w-4 text-destructive" />
                             </Button>
                         </div>
@@ -200,7 +226,7 @@ export default function AddProductForm() {
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => append({ value: "" })}
+                        onClick={() => appendImageUrl({ value: "" })}
                         suppressHydrationWarning
                     >
                         <PlusCircle className="mr-2 h-4 w-4" />

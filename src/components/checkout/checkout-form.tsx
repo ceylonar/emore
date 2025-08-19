@@ -45,7 +45,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
 
     message += "*Order Items:*\n";
     cartItems.forEach(item => {
-      message += `- ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}\n`;
+      message += `- ${item.name} (Size: ${item.size}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
     message += `\n*Total: $${totalPrice.toFixed(2)}*`;
@@ -140,7 +140,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
         <div className="space-y-4">
             {cartItems.map(item => (
                 <div key={item.id} className="flex justify-between items-start">
-                    <span className="font-semibold">{item.name} <span className="text-sm text-muted-foreground">x {item.quantity}</span></span>
+                    <span className="font-semibold">{item.name} <span className="text-sm text-muted-foreground">(x{item.quantity}, {item.size})</span></span>
                     <span className="text-right">${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
             ))}

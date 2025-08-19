@@ -34,6 +34,11 @@ async function handleDelete(productId: string) {
 }
 
 export default function ProductList({ products }: { products: Product[] }) {
+    const getTotalStock = (product: Product) => {
+        if (!product.sizes) return 0;
+        return product.sizes.reduce((total, size) => total + size.stock, 0);
+    }
+    
     return (
         <div className="mt-8">
              <h3 className="font-headline text-xl font-bold mb-4">Current Products</h3>
@@ -47,7 +52,7 @@ export default function ProductList({ products }: { products: Product[] }) {
                         <TableHead>Name</TableHead>
                         <TableHead>Category</TableHead>
                         <TableHead className="hidden md:table-cell">Price</TableHead>
-                        <TableHead className="hidden md:table-cell">Stock</TableHead>
+                        <TableHead className="hidden md:table-cell">Total Stock</TableHead>
                         <TableHead>
                             <span className="sr-only">Actions</span>
                         </TableHead>
@@ -76,7 +81,7 @@ export default function ProductList({ products }: { products: Product[] }) {
                                 <Badge variant="secondary">{formatCategory(product.category)}</Badge>
                             </TableCell>
                             <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
-                            <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
+                            <TableCell className="hidden md:table-cell">{getTotalStock(product)}</TableCell>
                              <TableCell>
                                 <div className="flex justify-end gap-2">
                                      <AlertDialog>
