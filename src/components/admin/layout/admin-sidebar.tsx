@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Image as ImageIcon } from 'lucide-react';
+import { Home, Package, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 const navLinks = [
   { href: '/admin', label: 'Dashboard', icon: Home },
@@ -26,7 +27,7 @@ export default function AdminSidebar() {
         <nav className="flex-grow px-4">
           <ul>
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = pathname.startsWith(link.href) && (link.href !== '/admin' || pathname === '/admin');
               return (
                 <li key={link.href}>
                   <Link
@@ -44,6 +45,18 @@ export default function AdminSidebar() {
             })}
           </ul>
         </nav>
+        <div className="mt-auto p-4">
+            <Separator className="my-4" />
+            <Link href="/"
+                className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+                )}
+                target="_blank"
+                >
+                <ExternalLink className="h-4 w-4" />
+                View Store
+            </Link>
+        </div>
       </div>
     </aside>
   );
