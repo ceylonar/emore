@@ -28,9 +28,10 @@ function AddBannerForm() {
             formRef.current?.reset();
             // The server action's revalidatePath will trigger a re-fetch of data
             // for server components, and for client components, we can either
-            // manually trigger a re-fetch or rely on navigation. For now,
-            // the user will see the change on next visit or reload.
-            // A more advanced solution would use a state management library.
+            // manually trigger a re-fetch or rely on navigation. A more advanced
+            // solution would use a state management library to update the list
+            // without waiting for the next page load. For now, the revalidation
+            // should handle updating the list on next navigation.
         } else {
             console.error(result.error);
             // In a real app, show a toast notification for the error.
@@ -63,8 +64,14 @@ function BannerList() {
         // This fetch will run on the client side.
         // It's okay for hydration as long as the initial render on the server
         // and client are the same (which they are, an empty list).
+        // The list will be populated once the component mounts on the client.
         getHeroBanners().then(setBanners);
     }, []);
+
+    // The revalidatePath in the server action will invalidate the cache.
+    // To see the new banner, the user currently has to refresh the page or navigate
+    // away and back. A more sophisticated implementation might use router.refresh()
+    // or a state management library to update the list in place.
 
     return (
         <div className="mt-8">
