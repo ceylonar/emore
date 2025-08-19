@@ -11,12 +11,14 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Button } from '../ui/button';
 
 export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 200, stopOnInteraction: true })
   );
 
   if (!banners || banners.length === 0) {
@@ -29,6 +31,9 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
       className="w-full"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
+      opts={{
+        loop: true,
+      }}
     >
       <CarouselContent>
         {banners.map((banner, index) => (
@@ -59,6 +64,8 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
           </CarouselItem>
         ))}
       </CarouselContent>
+       <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 hidden group-hover:flex" />
+       <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 hidden group-hover:flex" />
     </Carousel>
   );
 }
