@@ -139,7 +139,7 @@ export default function ManageProductsPage() {
 
     useEffect(() => {
         getProducts().then(setProducts);
-    }, [products]);
+    }, []);
 
   return (
     <div>

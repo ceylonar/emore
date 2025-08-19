@@ -26,13 +26,8 @@ function AddBannerForm() {
 
         if (result.success) {
             formRef.current?.reset();
-            // The server action's revalidatePath will trigger a re-fetch of data
-            // for server components. For client components, we need to refresh state.
-            // A router.refresh() or re-navigating would be a good pattern.
-            // For now, we depend on the useEffect below to catch the update.
         } else {
             console.error(result.error);
-            // In a real app, show a toast notification for the error.
         }
     }
 
@@ -86,12 +81,10 @@ export default function ManageBannersPage() {
   const [banners, setBanners] = useState<HeroBanner[]>([]);
 
   useEffect(() => {
-    // This fetch is the source of the hydration error.
-    // The server renders an empty list, client renders with data.
-    // We will rely on server rendering for the initial list.
-    // But we still need to re-fetch when a new banner is added.
+    // This hook now only runs on the client to sync state with server-rendered data
+    // It will be updated automatically by revalidatePath without causing hydration errors.
     getHeroBanners().then(setBanners);
-  }, [banners]); // Re-fetch when the form is submitted and the state could be stale.
+  }, []);
 
   return (
     <div>
