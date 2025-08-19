@@ -100,7 +100,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
               )}
             />
             
-            <Button type="submit" size="lg" className="w-full mt-4">Confirm Order</Button>
+            <Button type="submit" size="lg" className="w-full mt-4">Send Order via WhatsApp</Button>
           </form>
         </Form>
       </div>
