@@ -6,13 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Image from 'next/image';
-import type { Product } from '@/lib/types';
 import { useRef } from 'react';
 
-function AddProductForm() {
+export default function AddProductForm() {
     const formRef = useRef<HTMLFormElement>(null);
 
     async function handleAddProduct(formData: FormData) {
@@ -88,64 +84,5 @@ function AddProductForm() {
              </div>
             <Button type="submit">Add Product</Button>
         </form>
-    );
-}
-
-function ProductList({ products }: { products: Product[] }) {
-    return (
-        <div className="mt-8">
-             <h3 className="font-headline text-xl font-bold mb-4">Current Products</h3>
-             <Card>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
-                            <span className="sr-only">Image</span>
-                        </TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead className="hidden md:table-cell">Price</TableHead>
-                        <TableHead className="hidden md:table-cell">Stock</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {products.map((product) => (
-                        <TableRow key={product.id}>
-                            <TableCell className="hidden sm:table-cell">
-                                <Image
-                                    alt={product.name}
-                                    className="aspect-square rounded-md object-cover"
-                                    height="64"
-                                    src={product.imageUrl}
-                                    width="64"
-                                />
-                            </TableCell>
-                            <TableCell className="font-medium">{product.name}</TableCell>
-                            <TableCell>{product.category}</TableCell>
-                            <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
-                            <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </Card>
-        </div>
-    );
-}
-
-export default function ProductsView({ initialProducts }: { initialProducts: Product[] }) {
-    return (
-        <div className="grid gap-10">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Add New Product</CardTitle>
-                     <CardDescription>Fill out the form to add a new product to your inventory.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <AddProductForm />
-                </CardContent>
-            </Card>
-            <ProductList products={initialProducts} />
-        </div>
     );
 }
