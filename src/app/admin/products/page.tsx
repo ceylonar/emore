@@ -11,9 +11,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Image from 'next/image';
 import type { Product } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 function AddProductForm() {
+    const formRef = useRef<HTMLFormElement>(null);
+
     async function handleAddProduct(formData: FormData) {
         const name = formData.get('name') as string;
         const description = formData.get('description') as string;
@@ -28,13 +30,16 @@ function AddProductForm() {
             return;
         }
 
-        await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock });
-        // Since this is now a client component, we'll reload to see changes.
-        window.location.reload();
+        const result = await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock });
+        if (result.success) {
+            formRef.current?.reset();
+        } else {
+            // Handle error, e.g. show a toast
+        }
     }
 
     return (
-        <form action={handleAddProduct} className="space-y-4">
+        <form ref={formRef} action={handleAddProduct} className="space-y-4">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="name">Product Name</Label>
@@ -91,11 +96,7 @@ function ProductList() {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const productData = await getProducts();
-            setProducts(productData);
-        };
-        fetchProducts();
+        getProducts().then(setProducts);
     }, []);
 
     return (

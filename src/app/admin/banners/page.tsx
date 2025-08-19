@@ -26,10 +26,11 @@ function AddBannerForm() {
 
         if (result.success) {
             formRef.current?.reset();
-            // We need a way to refetch the banners. For now, a reload is the simplest.
-            // A more advanced solution would be to use a state management library or re-fetch on a timer.
-            // The server action's revalidatePath should handle cache invalidation for other users.
-            window.location.reload();
+            // The server action's revalidatePath will trigger a re-fetch of data
+            // for server components, and for client components, we can either
+            // manually trigger a re-fetch or rely on navigation. For now,
+            // the user will see the change on next visit or reload.
+            // A more advanced solution would use a state management library.
         } else {
             console.error(result.error);
             // In a real app, show a toast notification for the error.
@@ -59,11 +60,10 @@ function BannerList() {
     const [banners, setBanners] = useState<HeroBanner[]>([]);
     
     useEffect(() => {
-        const fetchBanners = async () => {
-            const bannerData = await getHeroBanners();
-            setBanners(bannerData);
-        };
-        fetchBanners();
+        // This fetch will run on the client side.
+        // It's okay for hydration as long as the initial render on the server
+        // and client are the same (which they are, an empty list).
+        getHeroBanners().then(setBanners);
     }, []);
 
     return (
