@@ -48,7 +48,9 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     message += `\n*Total: $${totalPrice.toFixed(2)}*`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsAppNumber}?text=${encodedMessage}`;
+    // Sanitize the phone number by removing non-digit characters
+    const sanitizedWhatsAppNumber = whatsAppNumber.replace(/\D/g, '');
+    const whatsappUrl = `https://wa.me/${sanitizedWhatsAppNumber}?text=${encodedMessage}`;
 
     clearCart();
     window.location.href = whatsappUrl;
