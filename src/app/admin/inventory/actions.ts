@@ -48,7 +48,7 @@ export async function addHeroBanner(data: unknown) {
   }
 
   try {
-    await addInventoryItem({ type: 'heroBanner', data: validatedFields.data });
+    await addInventoryitem({ type: 'heroBanner', data: validatedFields.data });
     revalidatePath('/admin/inventory');
     revalidatePath('/');
     return { success: true };

@@ -1,7 +1,7 @@
 'use server';
 
 /**
- * @fileOverview A Genkit flow for updating inventory in Firestore.
+ * @fileOverview A Genkit flow for updating inventory in Firestore using the Firebase Admin SDK.
  *
  * - addInventoryItem - A function that adds a product or hero banner to Firestore.
  * - AddInventoryItemInput - The input type for the addInventoryItem function.
@@ -9,8 +9,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { adminDb } from '@/lib/firebase-admin';
 
 const ProductSchema = z.object({
   name: z.string(),
@@ -55,15 +54,16 @@ const addInventoryItemFlow = ai.defineFlow(
   async (input) => {
     try {
       if (input.type === 'product') {
-        await addDoc(collection(db, 'products'), input.data);
-        console.log('Product added successfully to Firestore.');
+        // Using Admin SDK to bypass Firestore rules for admin actions
+        await adminDb.collection('products').add(input.data);
+        console.log('Product added successfully to Firestore via Admin SDK.');
       } else if (input.type === 'heroBanner') {
-        await addDoc(collection(db, 'heroBanners'), input.data);
-        console.log('Hero banner added successfully to Firestore.');
+        // Using Admin SDK to bypass Firestore rules for admin actions
+        await adminDb.collection('heroBanners').add(input.data);
+        console.log('Hero banner added successfully to Firestore via Admin SDK.');
       }
     } catch (error) {
-      console.error('Firestore write error:', error);
-      // Re-throw the error to be caught by the calling server action
+      console.error('Firestore write error (Admin SDK):', error);
       if (error instanceof Error) {
         throw new Error(`Failed to add item to Firestore: ${error.message}`);
       }
