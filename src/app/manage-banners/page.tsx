@@ -7,11 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
-import { revalidatePath } from 'next/cache';
 import type { HeroBanner } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 function AddBannerForm() {
+    const formRef = useRef<HTMLFormElement>(null);
+
     async function handleAddBanner(formData: FormData) {
         const title = formData.get('title') as string;
         const imageUrl = formData.get('imageUrl') as string;
@@ -21,15 +22,21 @@ function AddBannerForm() {
             return;
         }
 
-        await addBanner({ title, imageUrl, dataAiHint });
-        // This is a client component, so we can't use revalidatePath here.
-        // The parent page will need to handle revalidation or refresh.
-        // For now, a page reload will show the new banner.
-        window.location.reload();
+        const result = await addBanner({ title, imageUrl, dataAiHint });
+
+        if (result.success) {
+            formRef.current?.reset();
+            // The revalidation is handled by the server action, 
+            // so we don't need to reload the window anymore.
+            // A more sophisticated solution could involve using useOptimistic.
+        } else {
+            // Handle error case, e.g., show a toast notification
+            console.error(result.error);
+        }
     }
 
     return (
-        <form action={handleAddBanner} className="space-y-4">
+        <form ref={formRef} action={handleAddBanner} className="space-y-4">
             <div className="space-y-2">
                 <Label htmlFor="title">Banner Title</Label>
                 <Input id="title" name="title" placeholder="e.g. Summer Collection" required />
@@ -52,6 +59,11 @@ function BannerList() {
     const [banners, setBanners] = useState<HeroBanner[]>([]);
 
     useEffect(() => {
+        // This is not ideal as it won't show new banners without a reload.
+        // The page needs to be re-rendered to get the latest banners.
+        // The revalidatePath in the action should trigger a re-render for server components,
+        // but for a client component, we might need a more direct way to refresh data.
+        // For now, we rely on the user refreshing or navigating away and back.
         async function fetchBanners() {
             const bannerData = await getHeroBanners();
             setBanners(bannerData);
