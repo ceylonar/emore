@@ -38,22 +38,22 @@ export default function AddProductForm() {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="name">Product Name</Label>
-                    <Input id="name" name="name" placeholder="e.g. Silk Scarf" required />
+                    <Input id="name" name="name" placeholder="e.g. Silk Scarf" required suppressHydrationWarning />
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="price">Price</Label>
-                    <Input id="price" name="price" type="number" step="0.01" placeholder="e.g. 49.99" required />
+                    <Input id="price" name="price" type="number" step="0.01" placeholder="e.g. 49.99" required suppressHydrationWarning />
                 </div>
              </div>
             <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" placeholder="e.g. A finely crafted silk scarf..." required />
+                <Textarea id="description" name="description" placeholder="e.g. A finely crafted silk scarf..." required suppressHydrationWarning />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
                     <Select name="category" required>
-                        <SelectTrigger>
+                        <SelectTrigger suppressHydrationWarning>
                             <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -65,24 +65,24 @@ export default function AddProductForm() {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="size">Size</Label>
-                    <Input id="size" name="size" placeholder="e.g. One Size, Large" required />
+                    <Input id="size" name="size" placeholder="e.g. One Size, Large" required suppressHydrationWarning />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="stock">Stock</Label>
-                    <Input id="stock" name="stock" type="number" placeholder="e.g. 100" required />
+                    <Input id="stock" name="stock" type="number" placeholder="e.g. 100" required suppressHydrationWarning />
                 </div>
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="imageUrl">Image URL</Label>
-                    <Input id="imageUrl" name="imageUrl" placeholder="https://placehold.co/600x800.png" required />
+                    <Input id="imageUrl" name="imageUrl" placeholder="https://placehold.co/600x800.png" required suppressHydrationWarning />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="dataAiHint">AI Hint (optional)</Label>
-                    <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. product photo" />
+                    <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. product photo" suppressHydrationWarning />
                 </div>
              </div>
-            <Button type="submit">Add Product</Button>
+            <Button type="submit" suppressHydrationWarning>Add Product</Button>
         </form>
     );
 }

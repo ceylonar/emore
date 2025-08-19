@@ -31,17 +31,17 @@ export default function AddBannerForm() {
         <form ref={formRef} action={handleAddBanner} className="space-y-4">
             <div className="space-y-2">
                 <Label htmlFor="title">Banner Title</Label>
-                <Input id="title" name="title" placeholder="e.g. Summer Collection" required />
+                <Input id="title" name="title" placeholder="e.g. Summer Collection" required suppressHydrationWarning />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="imageUrl">Image URL</Label>
-                <Input id="imageUrl" name="imageUrl" placeholder="https://placehold.co/1200x600.png" required />
+                <Input id="imageUrl" name="imageUrl" placeholder="https://placehold.co/1200x600.png" required suppressHydrationWarning />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="dataAiHint">AI Hint (optional)</Label>
-                <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. fashion model" />
+                <Input id="dataAiHint" name="dataAiHint" placeholder="e.g. fashion model" suppressHydrationWarning />
             </div>
-            <Button type="submit">Add Banner</Button>
+            <Button type="submit" suppressHydrationWarning>Add Banner</Button>
         </form>
     );
 }
