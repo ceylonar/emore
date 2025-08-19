@@ -4,12 +4,10 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
-import { LayoutDashboard, Package, Settings, LogOut } from 'lucide-react';
-import { useAuth } from '@/context/auth-provider';
+import { LayoutDashboard, Package, Settings } from 'lucide-react';
 
 export default function AdminSidebarContent() {
   const pathname = usePathname();
-  const { logout } = useAuth();
   return (
     <>
         <SidebarHeader>
