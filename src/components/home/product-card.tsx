@@ -60,10 +60,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           <CardDescription className="pt-2 text-base">${product.price.toFixed(2)}</CardDescription>
         </CardHeader>
         <CardFooter className="p-0 mt-auto pt-4 flex-col gap-2 items-center">
-           <Button asChild className="w-full rounded-full" variant="secondary">
-            <Link href={`/product/${product.id}`}>
+           <Button className="w-full rounded-full" variant="secondary" asChild={false}>
               {totalStock > 0 ? 'Select Size' : 'Out of Stock'}
-            </Link>
           </Button>
         </CardFooter>
       </Card>
