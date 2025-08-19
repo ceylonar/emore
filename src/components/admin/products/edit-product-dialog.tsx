@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -47,7 +48,7 @@ export function EditProductDialog({ product }: { product: Product }) {
       description: product.description,
       price: product.price,
       category: product.category,
-      imageUrls: product.imageUrls ? product.imageUrls.map(url => ({ value: url })) : [{ value: '' }],
+      imageUrls: product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls.map(url => ({ value: url })) : [{ value: '' }],
       dataAiHint: product.dataAiHint || '',
       size: product.size,
       stock: product.stock,
