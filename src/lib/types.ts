@@ -5,10 +5,16 @@ export type ProductCategory =
   | 'trousers'
   | 'shorts'
   | 'hoodies'
+  | 'formal-shirts'
+  | 'tops'
+  | 'skirts-and-dresses'
+  | 'hoodies-and-jackets'
   | 'dresses'
   | 'sweaters'
   | 'belts'
   | 'scarves'
+  | 'slides'
+  | 'caps'
   | 'accessories';
 
 export interface SizeStock {

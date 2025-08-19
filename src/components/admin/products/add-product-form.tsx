@@ -143,10 +143,16 @@ export default function AddProductForm() {
                                     <SelectItem value="trousers">Trousers</SelectItem>
                                     <SelectItem value="shorts">Shorts</SelectItem>
                                     <SelectItem value="hoodies">Hoodies</SelectItem>
+                                    <SelectItem value="formal-shirts">Formal shirts</SelectItem>
+                                    <SelectItem value="tops">Tops</SelectItem>
+                                    <SelectItem value="skirts-and-dresses">Skirts & Dresses</SelectItem>
+                                    <SelectItem value="hoodies-and-jackets">Hoodies & Jackets</SelectItem>
                                     <SelectItem value="dresses">Dresses</SelectItem>
                                     <SelectItem value="sweaters">Sweaters</SelectItem>
                                     <SelectItem value="belts">Belts</SelectItem>
                                     <SelectItem value="scarves">Scarves</SelectItem>
+                                    <SelectItem value="slides">Slides</SelectItem>
+                                    <SelectItem value="caps">Caps</SelectItem>
                                     <SelectItem value="accessories">Accessories</SelectItem>
                                 </SelectContent>
                             </Select>

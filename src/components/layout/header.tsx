@@ -31,8 +31,13 @@ const navLinks = [
     title: 'WOMEN',
     href: '/women',
     items: [
-      { title: 'Dresses', href: '/women/dresses' },
-      { title: 'Sweaters', href: '/women/sweaters' },
+      { title: 'T-shirts', href: '/women/tshirts' },
+      { title: 'Formal shirts', href: '/women/formal-shirts' },
+      { title: 'Tops', href: '/women/tops' },
+      { title: 'Trousers', href: '/women/trousers' },
+      { title: 'Denims', href: '/women/denims' },
+      { title: 'Skirts & Dresses', href: '/women/skirts-and-dresses' },
+      { title: 'Hoodies & Jackets', href: '/women/hoodies-and-jackets' },
     ]
   },
   {
@@ -41,6 +46,8 @@ const navLinks = [
     items: [
       { title: 'Belts', href: '/accessories/belts' },
       { title: 'Scarves', href: '/accessories/scarves' },
+      { title: 'Slides', href: '/accessories/slides' },
+      { title: 'Caps', href: '/accessories/caps' },
     ]
   },
 ];
