@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
 import type { HeroBanner } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 function AddBannerForm() {
+    const formRef = useRef<HTMLFormElement>(null);
+
     async function handleAddBanner(formData: FormData) {
         const title = formData.get('title') as string;
         const imageUrl = formData.get('imageUrl') as string;
@@ -20,13 +22,22 @@ function AddBannerForm() {
             return;
         }
 
-        await addBanner({ title, imageUrl, dataAiHint });
-        // Since this is now a client component, we'll reload to see changes.
-        window.location.reload();
+        const result = await addBanner({ title, imageUrl, dataAiHint });
+
+        if (result.success) {
+            formRef.current?.reset();
+            // We need a way to refetch the banners. For now, a reload is the simplest.
+            // A more advanced solution would be to use a state management library or re-fetch on a timer.
+            // The server action's revalidatePath should handle cache invalidation for other users.
+            window.location.reload();
+        } else {
+            console.error(result.error);
+            // In a real app, show a toast notification for the error.
+        }
     }
 
     return (
-        <form action={handleAddBanner} className="space-y-4">
+        <form ref={formRef} action={handleAddBanner} className="space-y-4">
             <div className="space-y-2">
                 <Label htmlFor="title">Banner Title</Label>
                 <Input id="title" name="title" placeholder="e.g. Summer Collection" required />
