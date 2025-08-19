@@ -1,3 +1,5 @@
+'use client';
+
 import { getHeroBanners } from '@/lib/mock-data';
 import { addBanner } from './actions';
 import { Button } from '@/components/ui/button';
@@ -7,10 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { revalidatePath } from 'next/cache';
 import type { HeroBanner } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-async function AddBannerForm() {
+function AddBannerForm() {
     async function handleAddBanner(formData: FormData) {
-        'use server';
         const title = formData.get('title') as string;
         const imageUrl = formData.get('imageUrl') as string;
         const dataAiHint = formData.get('dataAiHint') as string | undefined;
@@ -20,8 +22,10 @@ async function AddBannerForm() {
         }
 
         await addBanner({ title, imageUrl, dataAiHint });
-        revalidatePath('/');
-        revalidatePath('/manage-banners');
+        // This is a client component, so we can't use revalidatePath here.
+        // The parent page will need to handle revalidation or refresh.
+        // For now, a page reload will show the new banner.
+        window.location.reload();
     }
 
     return (
@@ -44,8 +48,17 @@ async function AddBannerForm() {
 }
 
 
-async function BannerList() {
-    const banners: HeroBanner[] = await getHeroBanners();
+function BannerList() {
+    const [banners, setBanners] = useState<HeroBanner[]>([]);
+
+    useEffect(() => {
+        async function fetchBanners() {
+            const bannerData = await getHeroBanners();
+            setBanners(bannerData);
+        }
+        fetchBanners();
+    }, []);
+
 
     return (
         <div className="mt-12">

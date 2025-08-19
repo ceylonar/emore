@@ -1,3 +1,5 @@
+'use client';
+
 import { getHeroBanners } from '@/lib/mock-data';
 import { addBanner } from './actions';
 import { Button } from '@/components/ui/button';
@@ -5,12 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
-import { revalidatePath } from 'next/cache';
 import type { HeroBanner } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-async function AddBannerForm() {
+function AddBannerForm() {
     async function handleAddBanner(formData: FormData) {
-        'use server';
         const title = formData.get('title') as string;
         const imageUrl = formData.get('imageUrl') as string;
         const dataAiHint = formData.get('dataAiHint') as string | undefined;
@@ -20,8 +21,8 @@ async function AddBannerForm() {
         }
 
         await addBanner({ title, imageUrl, dataAiHint });
-        revalidatePath('/');
-        revalidatePath('/admin/banners');
+        // Since this is now a client component, we'll reload to see changes.
+        window.location.reload();
     }
 
     return (
@@ -43,8 +44,16 @@ async function AddBannerForm() {
     );
 }
 
-async function BannerList() {
-    const banners: HeroBanner[] = await getHeroBanners();
+function BannerList() {
+    const [banners, setBanners] = useState<HeroBanner[]>([]);
+    
+    useEffect(() => {
+        const fetchBanners = async () => {
+            const bannerData = await getHeroBanners();
+            setBanners(bannerData);
+        };
+        fetchBanners();
+    }, []);
 
     return (
         <div className="mt-8">

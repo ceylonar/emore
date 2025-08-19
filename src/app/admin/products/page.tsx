@@ -1,3 +1,5 @@
+'use client';
+
 import { getProducts } from '@/lib/mock-data';
 import { addProduct } from './actions';
 import { Button } from '@/components/ui/button';
@@ -8,13 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Image from 'next/image';
-import { revalidatePath } from 'next/cache';
 import type { Product } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-async function AddProductForm() {
+function AddProductForm() {
     async function handleAddProduct(formData: FormData) {
-        'use server';
-
         const name = formData.get('name') as string;
         const description = formData.get('description') as string;
         const price = parseFloat(formData.get('price') as string);
@@ -29,8 +29,8 @@ async function AddProductForm() {
         }
 
         await addProduct({ name, description, price, category, imageUrl, dataAiHint, size, stock });
-        revalidatePath('/');
-        revalidatePath('/admin/products');
+        // Since this is now a client component, we'll reload to see changes.
+        window.location.reload();
     }
 
     return (
@@ -87,8 +87,16 @@ async function AddProductForm() {
     );
 }
 
-async function ProductList() {
-    const products: Product[] = await getProducts();
+function ProductList() {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const productData = await getProducts();
+            setProducts(productData);
+        };
+        fetchProducts();
+    }, []);
 
     return (
         <div className="mt-8">
