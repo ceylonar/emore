@@ -12,13 +12,13 @@ const productSchema = z.object({
   category: z.enum(['men', 'women', 'accessories']),
   size: z.string().min(1, 'Size is required'),
   stock: z.coerce.number().int().min(0, 'Stock cannot be negative'),
-  imageUrl: z.string().url('Invalid image URL'),
+  imageUrl: z.string().min(1, 'Image URL is required'),
   dataAiHint: z.string().optional(),
 });
 
 const heroBannerSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  imageUrl: z.string().url('Invalid image URL'),
+  imageUrl: z.string().min(1, 'Image URL is required'),
   dataAiHint: z.string().optional(),
 });
 
