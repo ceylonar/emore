@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, User, Menu, X, LogOut } from 'lucide-react';
+import { ShoppingBag, User, Menu, X, LogOut, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-provider';
 import { useAuth } from '@/context/auth-provider';
@@ -46,7 +46,7 @@ const navLinks = [
 
 export default function Header() {
   const { cartCount } = useCart();
-  const { user, logout } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const getInitials = (name: string | null | undefined) => {
@@ -134,6 +134,14 @@ export default function Header() {
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">
+                          <ShieldCheck className="mr-2 h-4 w-4" />
+                          <span>Admin</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onSelect={() => logout()}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
