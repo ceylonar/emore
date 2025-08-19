@@ -37,7 +37,7 @@ export default function Footer() {
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} Emoré Elegance. All Rights Reserved.</p>
           <div className="mt-2">
-            <Link href="/manage-banners" className="text-xs text-muted-foreground/80 hover:text-primary">Manage Banners</Link>
+            <Link href="/admin" className="text-xs text-muted-foreground/80 hover:text-primary">Admin Panel</Link>
           </div>
         </div>
       </div>
