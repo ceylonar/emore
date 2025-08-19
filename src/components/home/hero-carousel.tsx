@@ -19,6 +19,10 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
     Autoplay({ delay: 3000, stopOnInteraction: true })
   );
 
+  if (!banners || banners.length === 0) {
+    return null;
+  }
+
   return (
     <Carousel
       plugins={[plugin.current]}
