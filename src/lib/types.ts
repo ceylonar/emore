@@ -6,6 +6,8 @@ export interface Product {
   category: 'men' | 'women' | 'accessories';
   imageUrl: string;
   dataAiHint?: string;
+  size: string;
+  stock: number;
 }
 
 export interface HeroBanner {
