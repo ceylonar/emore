@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </CardContent>
         <CardHeader className="p-0 text-center">
           <CardTitle className="font-headline text-xl">{product.name}</CardTitle>
-          <CardDescription className="pt-2 text-base">${product.price.toFixed(2)}</CardDescription>
+          <CardDescription className="pt-2 text-base">LKR {product.price.toFixed(2)}</CardDescription>
         </CardHeader>
         <CardFooter className="p-0 mt-auto pt-4 flex-col gap-2 items-center">
            <Button className="w-full rounded-full" variant="secondary" asChild={false}>

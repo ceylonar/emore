@@ -76,7 +76,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             </div>
             <div className="flex flex-col justify-center">
                 <h1 className="font-headline text-4xl lg:text-5xl font-bold">{product.name}</h1>
-                <p className="text-3xl mt-4">${product.price.toFixed(2)}</p>
+                <p className="text-3xl mt-4">LKR {product.price.toFixed(2)}</p>
                 <p className="mt-6 text-muted-foreground">{product.description}</p>
 
                 <div className="mt-8 space-y-4">

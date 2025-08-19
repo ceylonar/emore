@@ -44,10 +44,10 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
 
     message += "*Order Items:*\n";
     cartItems.forEach(item => {
-      message += `- ${item.name} (Size: ${item.size}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}\n`;
+      message += `- ${item.name} (Size: ${item.size}, Qty: ${item.quantity}) - LKR ${(item.price * item.quantity).toFixed(2)}\n`;
     });
 
-    message += `\n*Total: $${totalPrice.toFixed(2)}*`;
+    message += `\n*Total: LKR ${totalPrice.toFixed(2)}*`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
@@ -112,14 +112,14 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
             {cartItems.map(item => (
                 <div key={item.id} className="flex justify-between items-start">
                     <span className="font-semibold">{item.name} <span className="text-sm text-muted-foreground">(x{item.quantity}, {item.size})</span></span>
-                    <span className="text-right">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-right">LKR {(item.price * item.quantity).toFixed(2)}</span>
                 </div>
             ))}
         </div>
         <Separator className="my-6" />
         <div className="flex justify-between text-lg font-bold">
             <span>Total</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>LKR {totalPrice.toFixed(2)}</span>
         </div>
       </div>
     </div>

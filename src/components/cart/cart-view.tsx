@@ -55,7 +55,7 @@ export default function CartView() {
                       </h3>
                       <p className="mt-1 text-sm text-muted-foreground">Size: {item.size}</p>
                     </div>
-                    <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="ml-4">LKR {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="flex flex-1 items-end justify-between text-sm mt-4">
@@ -104,7 +104,7 @@ export default function CartView() {
             <div className="space-y-4 text-sm text-muted-foreground">
                 <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>LKR {totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                     <span>Shipping</span>
@@ -114,7 +114,7 @@ export default function CartView() {
             <Separator className="my-6" />
             <div className="flex justify-between text-base font-bold">
                 <p>Total</p>
-                <p>${totalPrice.toFixed(2)}</p>
+                <p>LKR {totalPrice.toFixed(2)}</p>
             </div>
             <Button asChild className="w-full mt-6" size="lg">
                 <Link href="/checkout">Proceed to Checkout</Link>
