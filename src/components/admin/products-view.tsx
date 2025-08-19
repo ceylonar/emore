@@ -134,8 +134,6 @@ function ProductList({ products }: { products: Product[] }) {
 }
 
 export default function ProductsView({ initialProducts }: { initialProducts: Product[] }) {
-    const products = initialProducts;
-
     return (
         <div className="grid gap-10">
             <Card>
@@ -147,7 +145,7 @@ export default function ProductsView({ initialProducts }: { initialProducts: Pro
                     <AddProductForm />
                 </CardContent>
             </Card>
-            <ProductList products={products} />
+            <ProductList products={initialProducts} />
         </div>
     );
 }

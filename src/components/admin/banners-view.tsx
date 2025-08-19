@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
 import type { HeroBanner } from '@/lib/types';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 
 function AddBannerForm() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -78,11 +78,6 @@ function BannerList({ banners }: { banners: HeroBanner[] }) {
 
 
 export default function BannersView({ initialBanners }: { initialBanners: HeroBanner[] }) {
-  // The list of banners is now managed by the parent server component.
-  // The `revalidatePath` in the server action will cause the server component to re-render,
-  // passing the updated list down to this client component.
-  const banners = initialBanners;
-
   return (
     <div className="grid gap-10">
         <Card>
@@ -94,7 +89,7 @@ export default function BannersView({ initialBanners }: { initialBanners: HeroBa
                 <AddBannerForm />
             </CardContent>
         </Card>
-        <BannerList banners={banners} />
+        <BannerList banners={initialBanners} />
     </div>
   );
 }
