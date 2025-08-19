@@ -191,7 +191,7 @@ export default function AddProductForm() {
                                     </FormItem>
                                 )}
                                 />
-                            <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={fields.length <= 1}>
+                            <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={fields.length <= 1} suppressHydrationWarning>
                                 <Trash2 className="h-4 w-4 text-destructive" />
                             </Button>
                         </div>
@@ -201,6 +201,7 @@ export default function AddProductForm() {
                         variant="outline"
                         size="sm"
                         onClick={() => append({ value: "" })}
+                        suppressHydrationWarning
                     >
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Add Image URL
