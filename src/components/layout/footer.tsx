@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -7,7 +8,9 @@ export default function Footer() {
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-headline text-lg font-bold">Emoré Elegance</h3>
+            <Link href="/" className="flex flex-col items-start">
+                <Image src="https://i.postimg.cc/yYBsYNbW/Screenshot-2025-08-19-184759.png" alt="Emoré Elegance Logo" width={140} height={40} />
+            </Link>
             <p className="mt-2 text-sm text-white/80">Quality wear imported from Italy.</p>
           </div>
           <div>
