@@ -75,10 +75,10 @@ export default function OrderList({ orders }: { orders: Order[] }) {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'confirmed')}>Mark as Confirmed</DropdownMenuItem>
-                                        <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'shipped')}>Mark as Shipped</DropdownMenuItem>
-                                        <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'delivered')}>Mark as Delivered</DropdownMenuItem>
-                                        <DropdownMenuItem onSelect={() => handleStatusChange(order.id, 'cancelled')} className="text-destructive">Cancel Order</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'confirmed')}>Mark as Confirmed</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'shipped')}>Mark as Shipped</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'delivered')}>Mark as Delivered</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'cancelled')} className="text-destructive">Cancel Order</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
