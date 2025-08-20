@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, Menu, Search } from 'lucide-react';
+import { ShoppingBag, Menu, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-provider';
 import {
@@ -13,6 +13,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from 'react';
 import Image from 'next/image';
+import { SearchInput } from './search-input';
 
 const navLinks = [
   {
@@ -56,6 +57,7 @@ const navLinks = [
 export default function Header() {
   const { cartCount } = useCart();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setSearchOpen] = useState(false);
 
   const NavMenu = ({ isMobile = false }: { isMobile?: boolean }) => (
     <nav className={isMobile ? "flex flex-col space-y-4" : "hidden md:flex md:items-center md:space-x-6"}>
@@ -88,12 +90,18 @@ export default function Header() {
         </div>
 
         <div className="flex items-center justify-center flex-1 ml-6">
+           {isSearchOpen ? (
+             <div className="w-full max-w-sm">
+                <SearchInput onSearch={() => setSearchOpen(false)} />
+             </div>
+           ) : (
             <p className="text-xs text-foreground/70 tracking-widest hidden md:block">QUALITY WEAR IMPORTED FROM ITALY</p>
+           )}
         </div>
 
         <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="hidden md:inline-flex">
-                <Search className="h-6 w-6" />
+            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(!isSearchOpen)}>
+                {isSearchOpen ? <X className="h-6 w-6" /> : <Search className="h-6 w-6" />}
                 <span className="sr-only">Search</span>
             </Button>
             <Button variant="ghost" size="icon" asChild>
