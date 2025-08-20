@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/carousel"
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import TypingEffect from './typing-effect';
 
 export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
   const plugin = React.useRef(
@@ -71,32 +70,40 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent md:bg-gradient-to-r md:from-black/70 md:via-black/20 md:to-transparent" />
                   <div className="relative text-left text-foreground p-8 md:p-24 self-center md:self-end w-full max-w-2xl">
-                    {banner.offerDetails && (
-                       <Badge variant="secondary" className="mb-2 text-lg">
-                          {current === index && <TypingEffect text={banner.offerDetails} />}
-                       </Badge>
-                    )}
-                    <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md">
-                      {current === index ? (
-                        banner.title.split(' ').map((word, i) => (
-                           <span key={i} className="block">
-                                <TypingEffect text={word} delay={i * 200} />
-                           </span>
-                        ))
-                      ) : (
-                         banner.title.split(' ').map((word, i) => (
-                           <span key={i} className="block opacity-0">{word}</span>
-                         ))
-                      )}
-                    </h2>
-                    {banner.description && 
-                        <p className="mt-4 text-lg text-white/90 drop-shadow-sm max-w-lg">
-                           {current === index && <TypingEffect text={banner.description} />}
-                        </p>
-                    }
-                    <Button asChild size="lg" className="mt-6 rounded-full font-bold px-8 py-6 text-sm bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg">
-                      <Link href="/#products">SHOP NOW</Link>
-                    </Button>
+                     {current === index ? (
+                       <>
+                        {banner.offerDetails && (
+                          <Badge variant="secondary" className="mb-2 text-lg animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                              {banner.offerDetails}
+                          </Badge>
+                        )}
+                        <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                          {banner.title}
+                        </h2>
+                        {banner.description && 
+                            <p className="mt-4 text-lg text-white/90 drop-shadow-sm max-w-lg animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                              {banner.description}
+                            </p>
+                        }
+                        <div className="animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+                          <Button asChild size="lg" className="mt-6 rounded-full font-bold px-8 py-6 text-sm bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg">
+                            <Link href="/#products">SHOP NOW</Link>
+                          </Button>
+                        </div>
+                       </>
+                     ) : (
+                        // Render placeholders to prevent layout shift but keep them invisible
+                       <>
+                        {banner.offerDetails && <Badge variant="secondary" className="mb-2 text-lg opacity-0">{banner.offerDetails}</Badge>}
+                        <h2 className="font-headline text-4xl md:text-7xl font-bold tracking-tight text-white drop-shadow-md opacity-0">{banner.title}</h2>
+                        {banner.description && <p className="mt-4 text-lg text-white/90 drop-shadow-sm max-w-lg opacity-0">{banner.description}</p>}
+                        <div>
+                          <Button asChild size="lg" className="mt-6 rounded-full font-bold px-8 py-6 text-sm opacity-0">
+                            <Link href="/#products">SHOP NOW</Link>
+                          </Button>
+                        </div>
+                       </>
+                     )}
                   </div>
                 </CardContent>
               </Card>
