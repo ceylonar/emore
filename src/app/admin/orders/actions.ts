@@ -1,6 +1,6 @@
 'use server';
 
-import { addDoc, collection, serverTimestamp, getDocs, query, orderBy, doc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, getDocs, query, orderBy, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Order, CartItem, OrderStatus } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
@@ -33,10 +33,16 @@ export async function getOrders(): Promise<Order[]> {
     const ordersCollection = collection(db, 'orders');
     const q = query(ordersCollection, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    })) as Order[];
+    return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const createdAt = data.createdAt as Timestamp;
+        return {
+            id: doc.id,
+            ...data,
+            // Convert timestamp to a serializable format (ISO string)
+            createdAt: createdAt.toDate().toISOString(),
+        } as Order;
+    });
 }
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {

@@ -58,7 +58,7 @@ export default function OrderList({ orders }: { orders: Order[] }) {
                     {orders.map((order) => (
                         <TableRow key={order.id}>
                             <TableCell className="font-medium">{formatOrderId(order.orderId)}</TableCell>
-                            <TableCell>{new Date(order.createdAt.seconds * 1000).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                             <TableCell>{order.customerName}</TableCell>
                             <TableCell>LKR {order.totalPrice.toFixed(2)}</TableCell>
                             <TableCell>

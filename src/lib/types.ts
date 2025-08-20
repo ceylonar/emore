@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export type ProductCategory =
   | 't-shirts'
   | 'polos'
@@ -66,5 +64,5 @@ export interface Order {
     items: CartItem[];
     totalPrice: number;
     status: OrderStatus;
-    createdAt: Timestamp;
+    createdAt: string; // Changed from Timestamp to string
 }
