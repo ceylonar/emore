@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Image as ImageIcon, ExternalLink, Settings } from 'lucide-react';
+import { Home, Package, Image as ImageIcon, ExternalLink, Settings, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import NextImage from 'next/image';
 
 const navLinks = [
   { href: '/admin', label: 'Dashboard', icon: Home },
+  { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/banners', label: 'Hero Banners', icon: ImageIcon },
   { href: '/admin/settings', label: 'Settings', icon: Settings },

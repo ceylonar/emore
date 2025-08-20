@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type ProductCategory =
   | 't-shirts'
   | 'polos'
@@ -51,4 +53,18 @@ export interface CartItem {
   imageUrl: string;
   quantity: number;
   size: string;
+}
+
+export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface Order {
+    id: string;
+    orderId: string;
+    customerName: string;
+    customerAddress: string;
+    customerMobile: string;
+    items: CartItem[];
+    totalPrice: number;
+    status: OrderStatus;
+    createdAt: Timestamp;
 }

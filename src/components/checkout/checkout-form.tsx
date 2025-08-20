@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { createOrder } from '@/app/admin/orders/actions';
+import { useState } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -21,6 +23,7 @@ interface CheckoutFormProps {
 
 export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
   const { cartItems, totalPrice, clearCart } = useCart();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,11 +34,33 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
     const orderId = `EMORE-${Date.now()}`;
-    // Using the correct international format for the WhatsApp number.
     const adminWhatsAppNumber = '94716559655';
 
+    // 1. Save the order to Firestore
+    const orderData = {
+        orderId,
+        customerName: values.name,
+        customerAddress: values.address,
+        customerMobile: values.mobileNumber,
+        items: cartItems,
+        totalPrice: totalPrice,
+        status: 'pending' as const,
+    };
+
+    const result = await createOrder(orderData);
+    
+    if (!result.success) {
+        // Handle error - maybe show a toast
+        console.error("Failed to save order:", result.error);
+        setIsSubmitting(false);
+        // Optionally, inform the user that something went wrong.
+        return;
+    }
+
+    // 2. Construct and redirect to WhatsApp message
     let message = `*New Order - ${orderId}*\n\n`;
     message += "*Customer Details:*\n";
     message += `Name: ${values.name}\n`;
@@ -52,6 +77,7 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
 
+    // 3. Clear the cart and redirect
     clearCart();
     window.location.href = whatsappUrl;
   };
@@ -102,7 +128,9 @@ export default function CheckoutForm({ whatsAppNumber }: CheckoutFormProps) {
               )}
             />
             
-            <Button type="submit" size="lg" className="w-full mt-4">Send Order via WhatsApp</Button>
+            <Button type="submit" size="lg" className="w-full mt-4" disabled={isSubmitting}>
+                {isSubmitting ? 'Processing...' : 'Send Order via WhatsApp'}
+            </Button>
           </form>
         </Form>
       </div>
