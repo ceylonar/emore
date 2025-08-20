@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/product/${product.id}`} className="group">
       <Card className="overflow-hidden border-none shadow-none rounded-lg bg-transparent flex flex-col h-full">
-        <CardContent className="p-0 mb-4">
+        <CardContent className="p-0 mb-4 relative overflow-hidden">
           <div className="aspect-w-3 aspect-h-4">
             {hasImage ? (
                 <Image

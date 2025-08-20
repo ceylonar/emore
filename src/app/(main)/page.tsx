@@ -30,7 +30,7 @@ export default function HomePage() {
       <Suspense fallback={<HeroCarouselSkeleton />}>
         <HeroCarouselLoader />
       </Suspense>
-      <section id="products" className="py-16 sm:py-24">
+      <section id="products" className="py-16 sm:py-24 animate-fade-in-up">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-headline text-3xl sm:text-4xl font-bold text-center mb-12">
             NEW DROPS
