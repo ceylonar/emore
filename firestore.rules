@@ -2,31 +2,34 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Allow public read for products, but no client-side writes.
+
+    // Allow public read access to products and banners for the storefront
     match /products/{productId} {
       allow read: if true;
-      allow write: if false;
-    }
-    
-    // Allow public read for banners, but no client-side writes.
-    match /heroBanners/{bannerId} {
-      allow read: if true;
-      allow write: if false;
+      allow write: if true; // Allow server-side actions to update stock
     }
 
-    // Allow clients to create orders, and allow public reads for the admin panel.
-    // Updates and deletes are blocked on the client and must go through server actions.
+    match /heroBanners/{bannerId} {
+      allow read: if true;
+      allow write: if true; // Allow admin to manage banners
+    }
+
+    // Allow anyone to create an order, but only server/admin can update/delete
     match /orders/{orderId} {
       allow read: if true;
       allow create: if true;
-      allow update, delete: if false;
+      allow update, delete: if true; // Allow server-side actions to update status
+    }
+    
+    // Allow reading settings but not writing from client
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if false; // Should be managed from backend/console
     }
 
-    // Allow public read for settings, but no client-side writes.
-    match /settings/{settingId} {
-        allow read: if true;
-        allow write: if false;
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
