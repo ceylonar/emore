@@ -3,25 +3,46 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to products and banners
+
+    // Helper function to check if a user is an admin (placeholder)
+    // In a real app, this would check for a custom claim on the user's auth token.
+    // Since there's no auth, we'll keep it simple and secure what we can.
+    function isAdmin() {
+      // For now, we assume server-side actions handle security.
+      // A full implementation would require user authentication.
+      // return request.auth.token.admin == true;
+      return false; // Disabling client-side admin writes for now.
+    }
+
+    // Products can be read by anyone, but only managed via server actions/backend.
     match /products/{productId} {
       allow read: if true;
-      allow write: if false; // Disallow client-side writes
+      allow write, delete: if isAdmin(); // Protect write access
+      allow create: if isAdmin();
     }
 
+    // Banners can be read by anyone, but only managed via server actions/backend.
     match /heroBanners/{bannerId} {
       allow read: if true;
-      allow write: if false; // Disallow client-side writes
+      allow write, delete: if isAdmin(); // Protect write access
+      allow create: if isAdmin();
     }
 
-    // Allow anyone to create an order (e.g., from the checkout page)
-    // but prevent them from reading, updating, or deleting other orders.
+    // Orders can be created by anyone through the checkout form.
+    // They can be read by the admin panel to display the list.
+    // Updates/deletes should only be done by an admin.
     match /orders/{orderId} {
-      allow create: if true;
-      allow read, update, delete: if false;
+      allow read: if true; // Allow admin panel to read orders
+      allow create: if true; // Allow customers to create orders
+      allow update, delete: if isAdmin(); // Protect updates/deletes
     }
-    
-    // Default deny all other collections
+
+    // Settings should only be read/written by an admin (not yet implemented)
+    match /settings/{settingId} {
+        allow read, write: if isAdmin();
+    }
+
+    // Deny all other access by default
     match /{document=**} {
       allow read, write: if false;
     }
